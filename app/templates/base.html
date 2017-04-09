@@ -17,8 +17,9 @@
     <script src="//cdn.bootcss.com/html5shiv/3.7.3/html5shiv.min.js"></script>
     <script src="//cdn.bootcss.com/respond.js/1.4.2/respond.min.js"></script>
     <![endif]-->
-    <!--Ckeditor.css-->
-    <script src="//cdn.ckeditor.com/4.6.2/standard/ckeditor.js"></script>
+
+    {% block head_script %}
+    {% endblock %}
 
 <body>
     <!-- Navigation -->
@@ -68,8 +69,6 @@
 
                 {% block page_content %}
                 {% endblock %}
-                {% block markdown %}
-                {% endblock %}
 
             </div>
         </div>
@@ -92,6 +91,7 @@
     <!-- Bootstrap -->
     <script src="//cdn.bootcss.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
 
-
+    {% block script %}
+    {% endblock %}
 </body>
 </html>

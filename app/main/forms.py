@@ -5,7 +5,7 @@ from ..models import Project
 from flaskckeditor import CKEditor
 
 
-class ReportForm(FlaskForm, CKEditor):
+class ReportForm(FlaskForm):
     body = TextAreaField('本周工作内容与下周计划',
                          validators=[DataRequired()])
     project = SelectField('项目', choices=[

@@ -1,24 +1,46 @@
 {% extends "base.html" %}
 {% import "bootstrap/wtf.html" as wtf %}
 
+{% block head_script %}
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='wangEditor/css/wangEditor.min.css') }}">
+    <style>
+    #body {
+        resize: vertical;
+        height: 500px
+    }
+    </style>
+{% endblock %}
+
 
 {% block page_content %}
     <h3>第{{ week_count }}周工作周报</h3>
+
     <form method="post">
         {{ form.hidden_tag() }}
-        {{ form.body(class='ckeditor') }}
-        <!-- 替换脚本 -->
-        <script type="text/javascript">
-            CKEDITOR.replace(
-                "body", {
-                    language: 'zh-cn',
-                    filebrowserUploadUrl: 'static/upload/',
-                }
-            );
-        </script>
+        {{ form.body(class='wangEditor') }}
 
         {{ form.project }}
         {{ form.save }}
         {{ submit_form.submit }}
     </form>
+{% endblock %}
+
+
+
+{% block script %}
+<script type="text/javascript" src="{{ url_for('static', filename='wangEditor/js/wangEditor.min.js') }}"></script>
+<script type="text/javascript">
+    // 获取元素
+    var div = document.getElementById('body');
+    // 生成编辑器
+    var editor = new wangEditor(div);
+    // 插入代码时的默认语言
+    editor.config.codeDefaultLang = 'python'
+    editor.config.uploadImgUrl = '/uploadimage/';
+    editor.config.uploadImgFileName = 'WriteBlogImage';
+    editor.create();
+    function postForm() {
+    };
+</script>
+
 {% endblock %}
