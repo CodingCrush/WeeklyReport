@@ -1,0 +1,18 @@
+{% extends 'base.html' %}
+{% import "bootstrap/wtf.html" as wtf %}
+
+
+{% block page_content %}
+
+    <div class="col-md-6 col-md-offset-3">
+
+        <i class="fa fa-user"></i> 用户登陆
+
+        {{ wtf.quick_form(form) }}
+        <br>
+
+        <p>新用户? <a href="{{ url_for('auth.register') }}">点击注册</a>.</p>
+
+    </div>
+
+{% endblock %}

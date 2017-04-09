@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+{% import "bootstrap/wtf.html" as wtf %}
+
+
+{% block page_content %}
+    {% for report in pagination.items %}
+    <div class="post-preview">
+
+        <a rel="tag" class="post-tag">{{ report.author }}</a>
+        <a rel="tag" class="post-tag">周次:{{ report.week_count }}</a>
+        <a rel="tag" class="post-tag">项目:{{ report.belong_project }}</a>
+
+        {{report.content|safe}}
+        <hr>
+    </div>
+    {% endfor %}
+
+    <ul class="pager">
+        {% if pagination.has_prev %}
+            <li class="previous"><a href="/my_report/{{pagination.page-1 }}">&larr; Newer </a></li>
+        {% else %}
+            <li class="previous disabled"><a href="#">&larr; Newer </a></li>
+        {% endif %}
+
+        {% if pagination.has_next %}
+            <li class="next"><a href="/my_report/{{pagination.page+1}}">Older &rarr;</a></li>
+        {% else %}
+            <li class="next disabled"><a href="#">Older &rarr;</a></li>
+        {% endif %}
+    </ul>
+
+{% endblock %}
