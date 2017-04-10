@@ -1,4 +1,4 @@
-from datetime import datetime
+import datetime
 from functools import wraps
 from flask import abort
 from flask_login import current_user
@@ -34,7 +34,18 @@ def admin_required(f):
 
 
 def get_week_count():
-    return datetime.utcnow().isocalendar()[1]
+    return datetime.datetime.utcnow().isocalendar()[1]
+
+
+def get_this_monday():
+    today = datetime.date.today()
+    weekday = today.weekday()
+    return today-datetime.timedelta(weekday)
+
+
+def is_allowed_file(filename):
+    return '.' in filename and \
+           filename.rsplit('.', 1)[1] in {'png', 'jpg', 'jpeg', 'gif'}
 
 
 default_content = "<p><strong>本周工作内容:</strong></p><ol><li>&nbsp;" \

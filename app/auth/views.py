@@ -34,7 +34,7 @@ def register():
             username=form.username.data,
             password=form.password.data,
             role=Role.objects(name='EMPLOYEE').first(),
-            belong_department=Department.objects(name=form.department.data).first())
+            department=Department.objects(name=form.department.data).first())
         user.save()
         login_user(user, False)
         return redirect(url_for('auth.login'))

@@ -1,6 +1,7 @@
 {% extends "base.html" %}
 {% import "bootstrap/wtf.html" as wtf %}
 
+
 {% block head_script %}
     <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='wangEditor/css/wangEditor.min.css') }}">
     <style>
@@ -15,14 +16,22 @@
 {% block page_content %}
     <h3>第{{ week_count }}周工作周报</h3>
 
-    <form method="post">
-        {{ form.hidden_tag() }}
-        {{ form.body(class='wangEditor') }}
 
-        {{ form.project }}
-        {{ form.save }}
-        {{ submit_form.submit }}
+    <form class="form form-inline" method="post" role="form">
+        {{ form.hidden_tag() }}
+        {{ wtf.form_errors(form, hiddens="only") }}
+
+        {{ form.body(class='wangEditor') }}
+        <hr style="height:10pt; visibility:hidden;" />
+
+        {{ wtf.form_field(form.project) }}
+        {{ wtf.form_field(form.save) }}
+
+        {{ wtf.form_field(submit_form.submit) }}
     </form>
+
+
+
 {% endblock %}
 
 
@@ -36,8 +45,8 @@
     var editor = new wangEditor(div);
     // 插入代码时的默认语言
     editor.config.codeDefaultLang = 'python'
-    editor.config.uploadImgUrl = '/uploadimage/';
-    editor.config.uploadImgFileName = 'WriteBlogImage';
+    editor.config.uploadImgUrl = {{ url_for('main.upload') }};
+    editor.config.uploadImgFileName = 'image';
     editor.create();
     function postForm() {
     };

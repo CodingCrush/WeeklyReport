@@ -58,13 +58,27 @@ class Department(db.DynamicDocument):
         return self.name
 
 
+class Project(db.DynamicDocument):
+    name = db.StringField(required=True)
+    is_closed = db.BooleanField(default=False)
+
+    @staticmethod
+    def insert_projects():
+        for proj in Config.Projects:
+            if not Project.objects(name=proj).first():
+                Project(name=proj).save()
+
+    def __str__(self):
+        return self.name
+
+
 class User(db.DynamicDocument, UserMixin):
     email = db.EmailField(required=True)
     username = db.StringField(max_length=50, required=True)
     password = db.StringField(max_length=50, required=True)
     password_hash = db.StringField(max_length=255)
     role = db.ReferenceField(Role)
-    belong_department = db.ReferenceField(Department)
+    department = db.ReferenceField(Department)
 
     @property
     def password(self):
@@ -100,31 +114,20 @@ class User(db.DynamicDocument, UserMixin):
 
 class Report(db.DynamicDocument):
     created_at = db.DateTimeField(default=datetime.now)
-    author = db.StringField(required=True)
+    author = db.StringField()
+    project = db.ReferenceField(Project)
     content = db.StringField(required=True)
     week_count = db.IntField()
     year = db.IntField()
     confirmed = db.BooleanField(default=False)
-    belong_project = db.StringField()
 
     def get_department_name(self):
-        return User.objects(username=self.author).first().belong_department.name
-
-
-class Project(db.DynamicDocument):
-    name = db.StringField(required=True)
-    is_closed = db.BooleanField(default=False)
-
-    @staticmethod
-    def insert_projects():
-        for proj in Config.Projects:
-            if not Project.objects(name=proj).first():
-                Project(name=proj).save()
-
-    def __str__(self):
-        return self.name
+        return User.objects.get(username=self.author).department.name
 
 
 @login_manager.user_loader
 def load_user(user_id):
-    return User.objects.get(id=user_id)
+    try:
+        return User.objects.get(id=user_id)
+    except User.DoesNotExist:
+        return None

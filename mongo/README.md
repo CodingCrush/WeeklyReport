@@ -12,6 +12,3 @@
     5. db.createUser({user: 'wr_usr',
                       pwd: 'wr_pwd',
                       roles: ["readWrite"]});
-    6. db.createUser({ user: 'wr_usr', 
-                   pwd: 'wr_pwd', 
-                   roles: [ { role: "userAdminAnyDatabase", db: "admin" } ] });

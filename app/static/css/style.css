@@ -32,6 +32,7 @@ body {
   font-size: 20px;
   color: #404040;
 }
+
 p {
   line-height: 1.7;
   margin: 1.7rem 0;
@@ -67,6 +68,15 @@ hr {
   border: 0;
   border-top: 1px solid #b7b7b7;
 }
+
+label {
+  display: inline-block;
+  max-width: 100%; // Force IE8 to wrap long content (see https://github.com/twbs/bootstrap/issues/13141)
+  margin-bottom: 5px;
+  font-size: 16px;
+  font-weight: normal;
+}
+
 .navbar-custom {
   font-size: 20px;
   position: fixed;
@@ -386,11 +396,10 @@ form .row:first-child .floating-label-form-group {
 }
 .btn {
   text-transform: uppercase;
-  font-size: 14px;
-  font-weight: 800;
+  font-size: 16px;
+  font-weight: normal;
   letter-spacing: 1px;
   border-radius: 0;
-  padding: 15px 25px;
 }
 .btn-lg {
   font-size: 16px;

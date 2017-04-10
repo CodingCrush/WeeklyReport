@@ -8,7 +8,7 @@
 
         <a rel="tag" class="post-tag">{{ report.author }}</a>
         <a rel="tag" class="post-tag">周次:{{ report.week_count }}</a>
-        <a rel="tag" class="post-tag">项目:{{ report.belong_project }}</a>
+        <a rel="tag" class="post-tag">项目:{{ report.project.name }}</a>
 
         {{report.content|safe}}
         <hr>

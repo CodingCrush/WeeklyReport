@@ -1,6 +1,5 @@
 from app.models import Report
 from app import create_app, db
-from flask_migrate import Migrate, MigrateCommand
 from flask_script import Manager, Shell
 import os
 from app.models import Role, Department, Project
@@ -8,9 +7,8 @@ from app.models import Role, Department, Project
 
 app = create_app(os.getenv('FLASK_CONFIG') or 'default')
 manager = Manager(app)
-migrate = Migrate(app, db)
 
-# Migrate origin model instances
+# Insert origin model instances
 Role.insert_roles()
 Department.insert_departments()
 Project.insert_projects()
@@ -19,7 +17,6 @@ Project.insert_projects()
 def make_shell_context():
     return dict(app=app, db=db, Report=Report)
 manager.add_command("shell", Shell(make_context=make_shell_context))
-manager.add_command('db', MigrateCommand)
 
 
 @manager.command
