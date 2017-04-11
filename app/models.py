@@ -122,7 +122,10 @@ class Report(db.DynamicDocument):
     confirmed = db.BooleanField(default=False)
 
     def get_department_name(self):
-        return User.objects.get(username=self.author).department.name
+        try:
+            return User.objects.get(username=self.author).department.name
+        except User.DoesNotExist:
+            return None
 
 
 @login_manager.user_loader

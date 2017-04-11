@@ -1,7 +1,6 @@
-from flask import render_template, request, Response, redirect, url_for
+from flask import render_template, request, Response, redirect, url_for, current_app
 from flask_admin.contrib.mongoengine import ModelView
 from flask_login import current_user
-from config import Config
 from datetime import datetime, timedelta
 import os
 from werkzeug.utils import secure_filename
@@ -32,11 +31,11 @@ def write_report():
     ).first()
     if form.save.data and form.validate_on_submit():
         if report:
-            report.content = form.body.data
+            report.content = form.body.data.replace('<br>', '')
             report.project = Project.objects.get(id=form.project.data)
             report.save()
         else:
-            Report(content=form.body.data,
+            Report(content=form.body.data.replace('<br>', ''),
                    author=current_user.username,
                    project=Project.objects.get(id=form.project.data),
                    created_at=datetime.now(),
@@ -67,8 +66,8 @@ def upload():
     img = request.files.get('image')
     if img and is_allowed_file(img.filename):
         filename = secure_filename(img.filename)
-        img.save(os.path.join(Config.UPLOAD_FOLDER, filename))
-        img_url = request.url_root + Config.IMAGE_UPLOAD_DIR + filename
+        img.save(os.path.join(current_app.config['UPLOAD_FOLDER'], filename))
+        img_url = request.url_root + current_app.config['IMAGE_UPLOAD_DIR'] + filename
         res = Response(img_url)
 
     else:
@@ -83,7 +82,7 @@ def upload():
 @permission_required(Permission.WRITE_REPORT)
 def my_report(page_count=1):
     pagination = Report.objects(author=current_user.username, confirmed=True).\
-        order_by('-created_at').paginate(page=page_count, per_page=Config.PER_PAGE)
+        order_by('-created_at').paginate(page=page_count, per_page=current_app.config['PER_PAGE'])
     return render_template('my_report.html', pagination=pagination)
 
 
@@ -107,7 +106,7 @@ def subordinate_report(page_count=1):
                          created_at__gte=form.start_at.data,
                          confirmed=True).\
             order_by('-created_at').paginate(
-            page=page_count, per_page=Config.PER_PAGE)
+            page=page_count, per_page=current_app.config['PER_PAGE'])
 
         return render_template('subordinate_report.html',
                                form=form,
@@ -120,7 +119,7 @@ def subordinate_report(page_count=1):
     form.end_at.data = datetime.now()+timedelta(hours=24)
 
     pagination = qst(confirmed=True).order_by('-created_at').paginate(
-            page=page_count, per_page=Config.PER_PAGE)
+            page=page_count, per_page=current_app.config['PER_PAGE'])
     return render_template('subordinate_report.html',
                            form=form,
                            pagination=pagination)
