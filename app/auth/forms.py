@@ -26,7 +26,7 @@ class RegistrationForm(FlaskForm):
         DataRequired(), EqualTo('password2', message='Passwords must match.')])
     password2 = PasswordField('确认密码', validators=[DataRequired()])
     department = SelectField('部门', choices=[
-        (dept.name, dept.name) for dept in Department.objects.all()])
+        (str(dept.id), dept.name) for dept in Department.objects.all()])
     submit = SubmitField('注册')
 
     def validate_username(self, field):

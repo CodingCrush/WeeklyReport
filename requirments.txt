@@ -1,9 +1,0 @@
-flask>=0.11.1
-flask_bootstrap>=3.3.7.0
-flask_login>=0.3.2
-flask_moment>=0.5.1
-flask_script>=2.0.5
-flask_wtf>=0.13.1
-flask_mongoengine>=0.8
-Flask-Mail==0.9.0
-flask-admin

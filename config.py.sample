@@ -4,9 +4,9 @@ import os
 class Config:
     SECRET_KEY = os.environ.get('SECRET_KEY') or 'nobody knows the password'
     PER_PAGE = 10
-    FLASK_ADMIN_EMAIL = "codingcrush@163.com"
+    FLASK_ADMIN_EMAIL = "admin@163.com"
     MONGODB_SETTINGS = {'db': 'wr',
-                        'host': '127.0.0.1',
+                        'host': 'localhost',
                         'port': 27017,
                         'username': 'wr_usr',
                         'password': 'wr_pwd',
@@ -28,8 +28,7 @@ class Config:
 
     Projects = (
         'project1',
-        'project2	',
+        'project2',
         'project3',
-        'project4',
     )
 config = {'default': Config}

@@ -29,5 +29,4 @@ def profile(length=25, profile_dir=None):
     app.run()
 
 if __name__ == '__main__':
-    # manager.run()
-    app.run(debug=True)
+    manager.run()

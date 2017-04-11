@@ -18,6 +18,7 @@
 
 
     <form class="form form-inline" method="post" role="form">
+        {{ form.csrf_token }}
         {{ form.hidden_tag() }}
         {{ wtf.form_errors(form, hiddens="only") }}
 

@@ -9,7 +9,7 @@ class ReportForm(FlaskForm):
     body = TextAreaField('本周工作内容与下周计划',
                          validators=[DataRequired()])
     project = SelectField('项目', choices=[
-        (project.name, project.name) for project in Project.objects(is_closed=False)])
+        (str(project.id), project.name) for project in Project.objects(is_closed=False)])
     save = SubmitField('保存')
 
 
@@ -23,8 +23,8 @@ class ReportFilterForm(FlaskForm):
     projects_choices = user_choices[:]
 
     user_choices.extend([(user.username, user.username) for user in User.objects.all()])
-    department_choices.extend([(dept.name, dept.name) for dept in Department.objects.all()])
-    projects_choices.extend([(proj.name, proj.name) for proj in Project.objects.all()])
+    department_choices.extend([(str(dept.id), dept.name) for dept in Department.objects.all()])
+    projects_choices.extend([(str(proj.id), proj.name) for proj in Project.objects.all()])
 
     user = SelectField('姓名', choices=user_choices)
     department = SelectField('部门', choices=department_choices)

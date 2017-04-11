@@ -33,12 +33,12 @@ def write_report():
     if form.save.data and form.validate_on_submit():
         if report:
             report.content = form.body.data
-            report.project = Project.objects(name=form.project.data).first()
+            report.project = Project.objects.get(id=form.project.data)
             report.save()
         else:
             Report(content=form.body.data,
                    author=current_user.username,
-                   project=Project.objects(name=form.project.data).first(),
+                   project=Project.objects.get(id=form.project.data),
                    created_at=datetime.now(),
                    week_count=get_week_count(),
                    year=datetime.today().year,
@@ -99,9 +99,9 @@ def subordinate_report(page_count=1):
         if not form.user.data == '*':
             qst = qst(author=form.user.data)
         if not form.project.data == '*':
-            qst = qst(project=Project.objects(name=form.project.data).first())
+            qst = qst(project=Project.objects.get(id=form.project.data))
         if not form.department.data == '*':
-            users = User.objects(department=Department.objects(name=form.department.data).first())
+            users = User.objects(department=Department.objects.get(id=form.department.data))
             qst = qst(author__in=[user.username for user in users])
         pagination = qst(created_at__lte=form.end_at.data,
                          created_at__gte=form.start_at.data,
