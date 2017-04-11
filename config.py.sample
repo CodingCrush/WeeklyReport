@@ -4,17 +4,23 @@ import os
 class Config:
     SECRET_KEY = os.environ.get('SECRET_KEY') or 'nobody knows the password'
     PER_PAGE = 10
-    FLASK_ADMIN_EMAIL = "admin@163.com"
+    FLASK_ADMIN_EMAIL = "<email>"
     MONGODB_SETTINGS = {'db': 'wr',
                         'host': 'localhost',
                         'port': 27017,
-                        'username': 'wr_usr',
-                        'password': 'wr_pwd',
+                        'username': '<wr-usr>',
+                        'password': '<wr-pwd>',
                         }
 
     IMAGE_UPLOAD_DIR = 'static/upload/'
     UPLOAD_FOLDER = os.path.join(
         os.path.dirname(os.path.abspath(__file__)), 'app/static/upload/')
+
+    MAIL_SERVER = 'smtp.163.com'
+    MAIL_PORT = 994
+    MAIL_USE_TLS = True
+    MAIL_USERNAME = os.environ.get('MAIL_USERNAME')
+    MAIL_PASSWORD = os.environ.get('MAIL_PASSWORD')
 
     @staticmethod
     def init_app(app):
@@ -31,4 +37,25 @@ class Config:
         'project2',
         'project3',
     )
-config = {'default': Config}
+
+
+
+class ProductionConfig(Config):
+    pass
+
+
+class DevelopmentConfig(Config):
+    DEBUG = True
+    MONGODB_SETTINGS = {'db': 'wr-dev',
+                        'host': '127.0.0.1',
+                        'port': 27017,
+                        'username': 'wr_usr',
+                        'password': 'wr_pwd',
+                        }
+
+
+config = {
+    'default': Config,
+    'production': ProductionConfig,
+    'development': DevelopmentConfig
+}
