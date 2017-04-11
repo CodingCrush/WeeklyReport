@@ -1,0 +1,38 @@
+{% extends "base.html" %}
+{% import "bootstrap/wtf.html" as wtf %}
+
+{% block head_script %}
+    <script src="{{ url_for('static', filename='chartkick/Chart.bundle.min.js') }}"></script>
+    <script src="{{ url_for('static', filename='chartkick/chartkick.js') }}"></script>
+{% endblock %}
+
+
+{% block page_content %}
+<div class="post-preview">
+    <h3>第{{ week_count }}周工作周报</h3>
+    <hr>
+
+    {% column_chart contrast %}
+
+
+    <p class="post-meta">各部门未交</a></p>
+    <hr>
+
+    {% for dept in stash %}
+        <a>已交:</a>
+            {% for name in dept['names']['has_submitted'] %}
+                <a rel="tag" class="post-tag">{{ name }}</a>
+            {% endfor %}
+        <hr style="height:2pt; visibility:hidden;" />
+        <a>未交:</a>
+            {% for name in dept['names']['not_yet'] %}
+                <a rel="tag" class="post-red-tag">{{ name }}</a>
+            {% endfor %}
+        <br>
+        <p class="post-meta">{{ dept.dept_name }}</a></p>
+        <hr>
+
+    {% endfor %}
+
+</div>
+{% endblock %}

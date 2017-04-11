@@ -1,3 +1,4 @@
 Config.py
 .idea/
 mongo_data/
+logs/awsgi.log

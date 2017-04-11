@@ -125,6 +125,54 @@ def subordinate_report(page_count=1):
                            pagination=pagination)
 
 
+@main.route('/statistics_report/', methods=['GET'])
+@permission_required(Permission.READ_DEPARTMENT_REPORT)
+def statistics_report():
+    if not current_user.can(Permission.READ_ALL_REPORT):
+        dept_users = [user.username for user in User.objects(
+            department=current_user.department) if user.is_authenticated]
+        submitted_users = [report.author for report in
+                           Report.objects(
+                               week_count=get_week_count(),
+                               year=datetime.today().year,
+                               author__in=dept_users)
+                           ]
+
+        data = {'已交': len(submitted_users),
+                '未交': len(dept_users)-len(submitted_users)}
+        names = {'has_submitted': submitted_users,
+                 'not_yet': set(dept_users)-set(submitted_users)}
+
+        return render_template('statistics_department.html',
+                               data=data,
+                               names=names,
+                               week_count=get_week_count())
+
+    stash = []
+    contrast = {}
+    for dept in Department.objects.all():
+        dept_users = [user.username for user in User.objects(
+            department=dept) if user.is_authenticated]
+        submitted_users = [report.author for report in
+                           Report.objects(week_count=get_week_count(),
+                                          author__in=dept_users,
+                                          year=datetime.today().year)
+                           ]
+
+        names = {'has_submitted': submitted_users,
+                 'not_yet': set(dept_users)-set(submitted_users)}
+
+        stash.append({'names': names,
+                      'dept_name': dept.name
+                      })
+        contrast[dept.name] = len(dept_users) - len(submitted_users)
+
+    return render_template('statistics_all.html',
+                           contrast=contrast,
+                           stash=stash,
+                           week_count=get_week_count())
+
+
 class WeeklyReportModelView(ModelView):
 
     def is_accessible(self):
