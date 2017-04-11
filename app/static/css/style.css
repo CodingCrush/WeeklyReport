@@ -29,7 +29,7 @@ h6,
   font-family: 'Open Sans', 'Helvetica Neue', Helvetica, Arial, sans-serif;
 }
 body {
-  font-size: 20px;
+  font-size: 15px;
   color: #404040;
 }
 
@@ -63,8 +63,8 @@ a img:focus {
   cursor: zoom-in;
 }
 hr {
-  margin-top: 0px;
-  margin-bottom: 0px;
+  margin-top: 5px;
+  margin-bottom: 5px;
   border: 0;
   border-top: 1px solid #b7b7b7;
 }
@@ -266,13 +266,30 @@ text-transform
 .post-preview > .post-tag:hover,
 .post-preview > .post-tag:focus {
   background-color: #31b0d5;
-  font-size: 1.8rem;
   color: #fff;
 }
+
+.post-preview > .post-red-tag {
+  display: inline-block;
+  padding: 0.4rem 0.4rem;
+  font-size: 1.5rem;
+  line-height: 0.9;
+  color: #a94442;
+  text-align: center;
+  white-space: nowrap;
+  vertical-align: baseline;
+  border-radius: 0.25em;
+  border: 1.5px solid #a94442;
+}
+.post-preview > .post-red-tag:hover,
+.post-preview > .post-red-tag:focus {
+  background-color: #a94442;
+  color: #fff;
+}
+
 .post-preview > .post-meta {
   color: #808080;
   font-size: 15px;
-  font-style: italic;
   margin-top: 0;
   margin-bottom: 0;
   direction: rtl;

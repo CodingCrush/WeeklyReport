@@ -47,10 +47,10 @@ class ProductionConfig(Config):
 class DevelopmentConfig(Config):
     DEBUG = True
     MONGODB_SETTINGS = {'db': 'wr-dev',
-                        'host': '127.0.0.1',
+                        'host': 'localhost',
                         'port': 27017,
-                        'username': 'wr_usr',
-                        'password': 'wr_pwd',
+                        'username': '<wr-usr>',
+                        'password': '<wr-pwd>',
                         }
 
 

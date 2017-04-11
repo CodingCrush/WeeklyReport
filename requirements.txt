@@ -8,3 +8,4 @@ flask_mongoengine
 Flask-Mail
 flask-admin
 gunicorn
+chartkick

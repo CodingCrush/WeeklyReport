@@ -48,6 +48,5 @@ def is_allowed_file(filename):
            filename.rsplit('.', 1)[1] in {'png', 'jpg', 'jpeg', 'gif'}
 
 
-default_content = "<p><strong>本周工作内容:</strong></p><ol><li>&nbsp;" \
-                 "</li><li>&nbsp;</li></ol><p>&nbsp;<strong>下周计划:" \
-                 "</strong></p><ol><li>&nbsp;</li><li>&nbsp;</li></ol>"
+default_content = "<p><strong>本周工作内容:</strong></p><ol><li></li></ol>" \
+                  "<p>&nbsp;<strong>下周计划:</strong></p><ol><li></li></ol>"
