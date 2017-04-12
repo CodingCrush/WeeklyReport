@@ -1,4 +1,4 @@
-from flask import render_template, redirect, url_for, flash
+from flask import render_template, redirect, url_for, session, flash
 from flask_login import login_user, logout_user, login_required, \
     current_user
 from . import auth
@@ -22,12 +22,16 @@ def login():
 @login_required
 def logout():
     logout_user()
+    flash('您已退出')
     return redirect(url_for('main.index'))
 
 
 @auth.route('/register', methods=['GET', 'POST'])
 def register():
     form = RegistrationForm()
+    form.department.choices = [
+        (str(dept.id), dept.name) for dept in Department.objects.all()]
+
     if form.validate_on_submit():
         user = User(
             email=form.email.data,
@@ -37,6 +41,7 @@ def register():
             department=Department.objects.get(id=form.department.data))
         user.save()
         login_user(user, False)
+        flash('成功注册，请登录')
         return redirect(url_for('auth.login'))
     return render_template('auth/register.html', form=form)
 
@@ -46,11 +51,11 @@ def register():
 def change_password():
     form = ChangePasswordForm()
     if form.validate_on_submit():
+        print(current_user.password_hash)
         if current_user.verify_password(form.old_password.data):
-            current_user.password = form.password.data
-            db.session.add(current_user)
-            flash('Your password has been updated.')
+            # import pdb;pdb.set_trace()
+            User.objects.get_or_404(id=current_user.id).password=form.password.data
+            session.pop('user_id', None)
+            print(current_user.password_hash)
             return redirect(url_for('main.index'))
-        else:
-            flash('Invalid password.')
     return render_template("auth/change_password.html", form=form)

@@ -1,4 +1,5 @@
-from flask import render_template, request, Response, redirect, url_for, current_app
+from flask import render_template, request, Response, redirect, \
+    url_for, current_app, flash
 from flask_admin.contrib.mongoengine import ModelView
 from flask_login import current_user
 from datetime import datetime, timedelta
@@ -23,6 +24,9 @@ def index():
 @permission_required(Permission.WRITE_REPORT)
 def write_report():
     form = ReportForm()
+    form.project.choices = [
+        (str(project.id), project.name) for project in Project.objects(is_closed=False)]
+
     submit_form = ReportSubmitForm()
     report = Report.objects(
         author=current_user.username,
@@ -31,9 +35,8 @@ def write_report():
     ).first()
     if form.save.data and form.validate_on_submit():
         if report:
-            report.content = form.body.data.replace('<br>', '')
-            report.project = Project.objects.get(id=form.project.data)
-            report.save()
+            report.update(content=form.body.data.replace('<br>', ''),
+                          project=Project.objects.get(id=form.project.data))
         else:
             Report(content=form.body.data.replace('<br>', ''),
                    author=current_user.username,
@@ -46,18 +49,21 @@ def write_report():
 
     if report and submit_form.submit.data and \
             submit_form.validate_on_submit():
-        report.confirmed = True
-        report.save()
+        report.update(confirmed=True)
+        flash('周报提交成功')
 
     if report:
         form.body.data = report.content
         form.project.data = report.project.name
     else:
         form.body.data = default_content
+
     return render_template('write_report.html',
                            form=form,
                            submit_form=submit_form,
-                           week_count=get_week_count())
+                           week_count=get_week_count(),
+                           start_at=get_this_monday(),
+                           end_at=get_this_monday()+timedelta(days=6))
 
 
 @main.route("/upload/", methods=["POST"])
@@ -69,7 +75,6 @@ def upload():
         img.save(os.path.join(current_app.config['UPLOAD_FOLDER'], filename))
         img_url = request.url_root + current_app.config['IMAGE_UPLOAD_DIR'] + filename
         res = Response(img_url)
-
     else:
         res = Response("上传失败")
     res.headers["ContentType"] = "text/html"
@@ -83,6 +88,12 @@ def upload():
 def my_report(page_count=1):
     pagination = Report.objects(author=current_user.username, confirmed=True).\
         order_by('-created_at').paginate(page=page_count, per_page=current_app.config['PER_PAGE'])
+    if not Report.objects(
+            author=current_user.username,
+            week_count=get_week_count(),
+            year=datetime.today().year,
+            confirmed=True):
+        flash('您的本周周报还未提交')
     return render_template('my_report.html', pagination=pagination)
 
 
@@ -92,8 +103,19 @@ def my_report(page_count=1):
 def subordinate_report(page_count=1):
     form = ReportFilterForm()
 
-    qst = Report.objects.all()
+    user_choices = [('*', '*')]
+    department_choices = user_choices[:]
+    projects_choices = user_choices[:]
 
+    user_choices.extend([(user.username, user.username) for user in User.objects.all()])
+    department_choices.extend([(str(dept.id), dept.name) for dept in Department.objects.all()])
+    projects_choices.extend([(str(proj.id), proj.name) for proj in Project.objects.all()])
+
+    form.user.choices = user_choices
+    form.department.choices = department_choices
+    form.project.choices = projects_choices
+
+    qst = Report.objects.all()
     if form.validate_on_submit():
         if not form.user.data == '*':
             qst = qst(author=form.user.data)

@@ -122,6 +122,7 @@ text-transform
     color: #ffffff;
     padding: 15px;
     font-size: 20px;
+    background-color: #404040;
   }
   .navbar-custom .nav li a:hover,
   .navbar-custom .nav li a:focus {

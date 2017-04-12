@@ -4,7 +4,7 @@ from wtforms import BooleanField, SubmitField, \
     StringField, PasswordField, SelectField
 from wtforms.validators import DataRequired, Length, Email, EqualTo
 from wtforms import ValidationError
-from ..models import User, Department
+from ..models import User
 
 
 class LoginForm(FlaskForm):
@@ -23,10 +23,9 @@ class RegistrationForm(FlaskForm):
         ])
 
     password = PasswordField('密码', validators=[
-        DataRequired(), EqualTo('password2', message='Passwords must match.')])
+        DataRequired(), EqualTo('password2', message='两次密码不匹配')])
     password2 = PasswordField('确认密码', validators=[DataRequired()])
-    department = SelectField('部门', choices=[
-        (str(dept.id), dept.name) for dept in Department.objects.all()])
+    department = SelectField('部门')
     submit = SubmitField('注册')
 
     def validate_username(self, field):
@@ -39,11 +38,11 @@ class RegistrationForm(FlaskForm):
 
 
 class ChangePasswordForm(FlaskForm):
-    old_password = PasswordField('Old password', validators=[DataRequired()])
-    password = PasswordField('New password', validators=[
-        DataRequired(), EqualTo('password2', message='Passwords must match')])
-    password2 = PasswordField('Confirm new password', validators=[DataRequired()])
-    submit = SubmitField('Update Password')
+    old_password = PasswordField('旧密码', validators=[DataRequired()])
+    password = PasswordField('新密码', validators=[
+        DataRequired(), EqualTo('password2', message='两次密码不匹配')])
+    password2 = PasswordField('确认新密码', validators=[DataRequired()])
+    submit = SubmitField('更新密码')
 
 
 class PasswordResetRequestForm(FlaskForm):

@@ -106,7 +106,7 @@ class User(db.DynamicDocument, UserMixin):
 
     @property
     def is_authenticated(self):
-        return self.can(Permission.WRITE_REPORT)
+        return True
 
     def __str__(self):
         return self.username
