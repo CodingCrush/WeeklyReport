@@ -6,7 +6,7 @@ from datetime import datetime, timedelta
 import os
 from werkzeug.utils import secure_filename
 from . import main
-from .forms import ReportForm, ReportSubmitForm, ReportFilterForm
+from .forms import ReportForm, ReportFilterForm
 from .. import admin
 from ..models import Permission, User, Report, Project, Department
 from ..utils import get_week_count, default_content, \
@@ -27,7 +27,6 @@ def write_report():
     form.project.choices = [
         (str(project.id), project.name) for project in Project.objects(is_closed=False)]
 
-    submit_form = ReportSubmitForm()
     report = Report.objects(
         author=current_user.username,
         week_count=get_week_count(),
@@ -45,12 +44,8 @@ def write_report():
                    week_count=get_week_count(),
                    year=datetime.today().year,
                    ).save()
-        return redirect(url_for('main.write_report'))
-
-    if report and submit_form.submit.data and \
-            submit_form.validate_on_submit():
-        report.update(confirmed=True)
         flash('周报提交成功')
+        return redirect(url_for('main.write_report'))
 
     if report:
         form.body.data = report.content
@@ -60,7 +55,6 @@ def write_report():
 
     return render_template('write_report.html',
                            form=form,
-                           submit_form=submit_form,
                            week_count=get_week_count(),
                            start_at=get_this_monday(),
                            end_at=get_this_monday()+timedelta(days=6))
@@ -82,17 +76,59 @@ def upload():
     return res
 
 
+@main.route('/edit_last_week_report/', methods=['GET', 'POST'])
+@permission_required(Permission.WRITE_REPORT)
+def edit_last_week_report():
+    form = ReportForm()
+    form.project.choices = [
+        (str(project.id), project.name) for project in Project.objects(is_closed=False)]
+
+    last_week = datetime.now() - timedelta(days=7)
+    last_week_start_at = get_this_monday() - timedelta(days=7)
+    last_week_end_at = get_this_monday()
+
+    report = Report.objects(
+        author=current_user.username,
+        week_count=get_week_count(last_week),
+        year=last_week.year).first()
+
+    if form.save.data and form.validate_on_submit():
+        if report:
+            report.update(content=form.body.data.replace('<br>', ''),
+                          project=Project.objects.get(id=form.project.data))
+        else:
+            Report(content=form.body.data.replace('<br>', ''),
+                   author=current_user.username,
+                   project=Project.objects.get(id=form.project.data),
+                   created_at=datetime.now(),
+                   week_count=get_week_count(last_week),
+                   year=last_week.year).save()
+        flash('周报提交成功')
+        return redirect(url_for('main.edit_last_week_report'))
+
+    if report:
+        form.body.data = report.content
+        form.project.data = report.project.name
+    else:
+        form.body.data = default_content
+    flash('正在编辑上周周报')
+    return render_template('write_report.html',
+                           form=form,
+                           week_count=get_week_count(last_week),
+                           start_at=last_week_start_at,
+                           end_at=last_week_end_at-timedelta(days=1))
+
+
 @main.route('/my_report/', methods=['GET'])
 @main.route('/my_report/<int:page_count>', methods=['GET'])
 @permission_required(Permission.WRITE_REPORT)
 def my_report(page_count=1):
-    pagination = Report.objects(author=current_user.username, confirmed=True).\
+    pagination = Report.objects(author=current_user.username).\
         order_by('-created_at').paginate(page=page_count, per_page=current_app.config['PER_PAGE'])
     if not Report.objects(
             author=current_user.username,
             week_count=get_week_count(),
-            year=datetime.today().year,
-            confirmed=True):
+            year=datetime.today().year):
         flash('您的本周周报还未提交')
     return render_template('my_report.html', pagination=pagination)
 
@@ -125,10 +161,9 @@ def subordinate_report(page_count=1):
             users = User.objects(department=Department.objects.get(id=form.department.data))
             qst = qst(author__in=[user.username for user in users])
         pagination = qst(created_at__lte=form.end_at.data,
-                         created_at__gte=form.start_at.data,
-                         confirmed=True).\
-            order_by('-created_at').paginate(
-            page=page_count, per_page=current_app.config['PER_PAGE'])
+                         created_at__gte=form.start_at.data).order_by(
+            '-created_at').paginate(page=page_count,
+                                    per_page=current_app.config['PER_PAGE'])
 
         return render_template('subordinate_report.html',
                                form=form,
@@ -140,7 +175,7 @@ def subordinate_report(page_count=1):
     form.start_at.data = get_this_monday()
     form.end_at.data = datetime.now()+timedelta(hours=24)
 
-    pagination = qst(confirmed=True).order_by('-created_at').paginate(
+    pagination = qst.order_by('-created_at').paginate(
             page=page_count, per_page=current_app.config['PER_PAGE'])
     return render_template('subordinate_report.html',
                            form=form,

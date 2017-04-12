@@ -1,6 +1,6 @@
 from flask_wtf import FlaskForm
 from wtforms.validators import DataRequired
-from wtforms import SubmitField, TextAreaField, SelectField
+from wtforms import SubmitField, TextAreaField, SelectField,RadioField
 from wtforms.fields.html5 import DateField
 
 
@@ -8,11 +8,7 @@ class ReportForm(FlaskForm):
     body = TextAreaField('本周工作内容与下周计划',
                          validators=[DataRequired()])
     project = SelectField('项目')
-    save = SubmitField('保存')
-
-
-class ReportSubmitForm(FlaskForm):
-    submit = SubmitField('提交考核')
+    save = SubmitField('提交')
 
 
 class ReportFilterForm(FlaskForm):

@@ -94,7 +94,6 @@ label {
 .navbar-custom .nav li a {
 text-transform
   font-weight: 400;
-  letter-spacing: 1px;
   text-decoration: none;
 }
 @media only screen and (min-width: 768px) {
@@ -121,7 +120,8 @@ text-transform
   .navbar-custom .nav li a {
     color: #ffffff;
     padding: 15px;
-    font-size: 20px;
+    font-size: 18px;
+    font-family: arial;
     background-color: #404040;
   }
   .navbar-custom .nav li a:hover,
@@ -129,7 +129,6 @@ text-transform
     color: #777;
     font-weight: 500;
     display: inline-block;
-    font-family: arial;
   }
 }
 @media only screen and (min-width: 1170px) {

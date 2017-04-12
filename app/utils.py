@@ -34,8 +34,8 @@ def admin_required(f):
            permission_required(Permission.ADMINISTER)(f)
 
 
-def get_week_count():
-    return datetime.datetime.utcnow().isocalendar()[1]
+def get_week_count(at=datetime.datetime.now()):
+    return at.isocalendar()[1]
 
 
 def get_this_monday():

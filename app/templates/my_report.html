@@ -3,6 +3,9 @@
 
 
 {% block page_content %}
+
+    <h3><i class="fa fa-pencil-square-o" aria-hidden="true"></i><a href="{{url_for('main.edit_last_week_report')}}">编辑上周周报</a></h3>
+    <hr>
     {% for report in pagination.items %}
     <div class="post-preview">
 

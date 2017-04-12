@@ -53,9 +53,10 @@ def change_password():
     if form.validate_on_submit():
         print(current_user.password_hash)
         if current_user.verify_password(form.old_password.data):
-            # import pdb;pdb.set_trace()
-            User.objects.get_or_404(id=current_user.id).password=form.password.data
-            session.pop('user_id', None)
+            import pdb;pdb.set_trace()
+            current_user.password = form.password.data
+            # session.clear()
+            # session.modified=True
             print(current_user.password_hash)
             return redirect(url_for('main.index'))
     return render_template("auth/change_password.html", form=form)

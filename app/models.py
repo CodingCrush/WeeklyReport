@@ -119,7 +119,6 @@ class Report(db.DynamicDocument):
     content = db.StringField(required=True)
     week_count = db.IntField()
     year = db.IntField()
-    confirmed = db.BooleanField(default=False)
 
     def get_department_name(self):
         try:

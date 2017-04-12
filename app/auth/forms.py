@@ -2,7 +2,7 @@ from flask_wtf import FlaskForm
 from wtforms.fields.html5 import EmailField
 from wtforms import BooleanField, SubmitField, \
     StringField, PasswordField, SelectField
-from wtforms.validators import DataRequired, Length, Email, EqualTo
+from wtforms.validators import DataRequired, Length, EqualTo
 from wtforms import ValidationError
 from ..models import User
 
@@ -43,22 +43,22 @@ class ChangePasswordForm(FlaskForm):
         DataRequired(), EqualTo('password2', message='两次密码不匹配')])
     password2 = PasswordField('确认新密码', validators=[DataRequired()])
     submit = SubmitField('更新密码')
-
-
-class PasswordResetRequestForm(FlaskForm):
-    email = StringField('Email', validators=[DataRequired(), Length(1, 64),
-                                             Email()])
-    submit = SubmitField('Reset Password')
-
-
-class PasswordResetForm(FlaskForm):
-    email = StringField('Email', validators=[DataRequired(), Length(1, 64),
-                                             Email()])
-    password = PasswordField('New Password', validators=[
-        DataRequired(), EqualTo('password2', message='Passwords must match')])
-    password2 = PasswordField('Confirm password', validators=[DataRequired()])
-    submit = SubmitField('Reset Password')
-
-    def validate_email(self, field):
-        if User.query.filter_by(email=field.data).first() is None:
-            raise ValidationError('Unknown email address.')
+#
+#
+# class PasswordResetRequestForm(FlaskForm):
+#     email = StringField('Email', validators=[DataRequired(), Length(1, 64),
+#                                              Email()])
+#     submit = SubmitField('Reset Password')
+#
+#
+# class PasswordResetForm(FlaskForm):
+#     email = StringField('Email', validators=[DataRequired(), Length(1, 64),
+#                                              Email()])
+#     password = PasswordField('New Password', validators=[
+#         DataRequired(), EqualTo('password2', message='Passwords must match')])
+#     password2 = PasswordField('Confirm password', validators=[DataRequired()])
+#     submit = SubmitField('Reset Password')
+#
+#     def validate_email(self, field):
+#         if User.query.filter_by(email=field.data).first() is None:
+#             raise ValidationError('Unknown email address.')

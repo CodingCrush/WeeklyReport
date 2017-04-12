@@ -8,15 +8,15 @@
         {{ form.hidden_tag() }}
         {{ wtf.form_errors(form, hiddens="only") }}
 
-        {{ wtf.form_field(form.start_at) }}
-        {{ wtf.form_field(form.end_at) }}
+        <i class="fa fa-calendar-minus-o" aria-hidden="true"></i>{{ wtf.form_field(form.start_at) }}
+        <i class="fa fa-calendar-plus-o" aria-hidden="true"></i>{{ wtf.form_field(form.end_at) }}
         <hr style="height:10pt; visibility:hidden;" />
 
-        {{ wtf.form_field(form.user) }}
-        {{ wtf.form_field(form.department) }}
-        {{ wtf.form_field(form.project) }}
+        <i class="fa fa-user" aria-hidden="true"></i>{{ wtf.form_field(form.user) }}
+        <i class="fa fa-users" aria-hidden="true"></i>{{ wtf.form_field(form.department) }}
+        <i class="fa fa-archive" aria-hidden="true"></i></i>{{ wtf.form_field(form.project) }}
 
-        {{ wtf.form_field(form.submit) }}
+        <i class="fa fa-search" aria-hidden="true"></i>{{ wtf.form_field(form.submit) }}
     </form>
     <hr>
 
