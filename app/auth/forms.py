@@ -8,7 +8,7 @@ from ..models import User
 
 
 class LoginForm(FlaskForm):
-    username = StringField('用户名', validators=[
+    email = EmailField('邮箱', validators=[
         DataRequired(), Length(2, 64)])
     password = PasswordField('密码', validators=[DataRequired()])
     remember_me = BooleanField('记住密码')
@@ -18,7 +18,7 @@ class LoginForm(FlaskForm):
 class RegistrationForm(FlaskForm):
     email = EmailField('邮箱', validators=[
          DataRequired(), Length(1, 64)])
-    username = StringField('用户名', validators=[
+    username = StringField('姓名', validators=[
         DataRequired(), Length(1, 64)
         ])
 
@@ -30,7 +30,7 @@ class RegistrationForm(FlaskForm):
 
     def validate_username(self, field):
         if User.objects(name=field.data):
-            raise ValidationError('用户名已被注册')
+            raise ValidationError('姓名已被注册')
 
     def validate_email(self, field):
         if User.objects(email=field.data):

@@ -11,7 +11,7 @@ from .forms import LoginForm, RegistrationForm, ChangePasswordForm
 def login():
     form = LoginForm()
     if form.validate_on_submit():
-        user = User.objects(username=form.username.data).first()
+        user = User.objects(email=form.email.data).first()
         if user and user.verify_password(form.password.data):
             login_user(user, form.remember_me.data)
             return redirect(url_for('main.index'))

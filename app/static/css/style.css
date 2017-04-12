@@ -256,35 +256,26 @@ text-transform
   padding: 0.4rem 0.4rem;
   font-size: 1.5rem;
   line-height: 0.9;
-  color: #1bb3e9;
+  color: #ffffff;
   text-align: center;
   white-space: nowrap;
   vertical-align: baseline;
   border-radius: 0.25em;
+  background-color: #31b0d5;
   border: 1.5px solid #1bb3e9;
 }
-.post-preview > .post-tag:hover,
-.post-preview > .post-tag:focus {
-  background-color: #31b0d5;
-  color: #fff;
-}
-
 .post-preview > .post-red-tag {
   display: inline-block;
   padding: 0.4rem 0.4rem;
   font-size: 1.5rem;
   line-height: 0.9;
-  color: #a94442;
+  color: #ffffff;
   text-align: center;
   white-space: nowrap;
   vertical-align: baseline;
   border-radius: 0.25em;
-  border: 1.5px solid #a94442;
-}
-.post-preview > .post-red-tag:hover,
-.post-preview > .post-red-tag:focus {
   background-color: #a94442;
-  color: #fff;
+  border: 1.5px solid #a94442;
 }
 
 .post-preview > .post-meta {
