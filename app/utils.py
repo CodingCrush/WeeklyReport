@@ -1,8 +1,7 @@
 import datetime
 from functools import wraps
-from flask import abort
+from flask import abort, current_app
 from flask_login import current_user
-from config import Config
 from .models import Permission
 
 
@@ -30,7 +29,7 @@ def email_check(email_address):
 
 
 def admin_required(f):
-    return email_check(Config.FLASK_ADMIN_EMAIL)(f) or \
+    return email_check(current_app.config['FLASK_ADMIN_EMAIL'])(f) or \
            permission_required(Permission.ADMINISTER)(f)
 
 

@@ -1,16 +1,18 @@
 import os
 
 
-class Config:
+class ProductionConfig:
     SECRET_KEY = os.environ.get('SECRET_KEY') or 'nobody knows the password'
     PER_PAGE = 10
     FLASK_ADMIN_EMAIL = "<email>"
-    MONGODB_SETTINGS = {'db': 'wr',
-                        'host': 'localhost',
-                        'port': 27017,
-                        'username': '<wr-usr>',
-                        'password': '<wr-pwd>',
-                        }
+
+    MONGODB_SETTINGS = {
+        'db': 'wr',
+        'host': 'localhost',
+        'port': 27017,
+        'username': 'wr_usr',
+        'password': 'wr_pwd',
+    }
 
     IMAGE_UPLOAD_DIR = 'static/upload/'
     UPLOAD_FOLDER = os.path.join(
@@ -26,36 +28,32 @@ class Config:
     def init_app(app):
         pass
 
-    Departments = (
+    DEPARTMENTS = (
         '人力资源部',
         '行政部',
         '测试部',
     )
 
-    Projects = (
+    PROJECTS = (
         'project1',
         'project2',
         'project3',
     )
 
 
-
-class ProductionConfig(Config):
-    pass
-
-
-class DevelopmentConfig(Config):
+class DevelopmentConfig(ProductionConfig):
     DEBUG = True
-    MONGODB_SETTINGS = {'db': 'wr-dev',
-                        'host': 'localhost',
-                        'port': 27017,
-                        'username': '<wr-usr>',
-                        'password': '<wr-pwd>',
-                        }
+    MONGODB_SETTINGS = {
+        'db': 'wr-dev',
+        'host': 'localhost',
+        'port': 27017,
+        'username': 'wr_usr',
+        'password': 'wr_pwd',
+    }
 
 
 config = {
-    'default': Config,
+    'default': DevelopmentConfig,
     'production': ProductionConfig,
     'development': DevelopmentConfig
 }

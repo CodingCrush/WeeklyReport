@@ -1,16 +1,16 @@
 from datetime import datetime
 from werkzeug.security import generate_password_hash, check_password_hash
 from . import db, login_manager
+from flask import current_app
 from flask_login import UserMixin
-from config import Config
 
 
 class Permission:
-    DO_NOTHING = 0x01
-    WRITE_REPORT = 0x02
-    READ_DEPARTMENT_REPORT = 0x04
-    READ_ALL_REPORT = 0X08
-    ENTER_ADMIN = 0x16
+    DO_NOTHING = 0x00
+    WRITE_REPORT = 0x01
+    READ_DEPARTMENT_REPORT = 0x02
+    READ_ALL_REPORT = 0X04
+    ENTER_ADMIN = 0x08
 
 
 class Role(db.DynamicDocument):
@@ -21,17 +21,15 @@ class Role(db.DynamicDocument):
     def insert_roles():
         roles = {
             'BAD_GUY': Permission.DO_NOTHING,
-            'EMPLOYEE': (Permission.DO_NOTHING |
-                         Permission.WRITE_REPORT),
-            'MANAGER': (Permission.DO_NOTHING |
-                        Permission.WRITE_REPORT |
+            'EMPLOYEE': Permission.WRITE_REPORT,
+            'MANAGER': (Permission.WRITE_REPORT |
                         Permission.READ_DEPARTMENT_REPORT |
                         Permission.ENTER_ADMIN),
-            'HR': (Permission.DO_NOTHING |
-                   Permission.WRITE_REPORT |
+            'HR': (Permission.WRITE_REPORT |
                    Permission.READ_DEPARTMENT_REPORT |
                    Permission.READ_ALL_REPORT),
-            'BOSS': (Permission.DO_NOTHING |
+            'BOSS': (Permission.WRITE_REPORT |
+                     Permission.READ_DEPARTMENT_REPORT |
                      Permission.READ_ALL_REPORT),
             'Administrator': 0xff,
         }
@@ -50,7 +48,7 @@ class Department(db.DynamicDocument):
 
     @staticmethod
     def insert_departments():
-        for dept in Config.Departments:
+        for dept in current_app.config['DEPARTMENTS']:
             if not Department.objects(name=dept).first():
                 Department(name=dept).save()
 
@@ -64,7 +62,7 @@ class Project(db.DynamicDocument):
 
     @staticmethod
     def insert_projects():
-        for proj in Config.Projects:
+        for proj in current_app.config['PROJECTS']:
             if not Project.objects(name=proj).first():
                 Project(name=proj).save()
 
@@ -102,7 +100,7 @@ class User(db.DynamicDocument, UserMixin):
 
     @property
     def is_admin(self):
-        return self.email == Config.FLASK_ADMIN_EMAIL
+        return self.email == current_app.config['FLASK_ADMIN_EMAIL']
 
     @property
     def is_authenticated(self):

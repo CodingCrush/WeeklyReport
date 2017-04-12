@@ -1,4 +1,3 @@
-from flask import Flask
 from flask_admin import Admin
 from flask_bootstrap import Bootstrap
 from flask_mail import Mail

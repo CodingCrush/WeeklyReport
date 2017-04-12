@@ -111,7 +111,6 @@ def edit_last_week_report():
         form.project.data = report.project.name
     else:
         form.body.data = default_content
-    flash('正在编辑上周周报')
     return render_template('write_report.html',
                            form=form,
                            week_count=get_week_count(last_week),
@@ -170,7 +169,8 @@ def subordinate_report(page_count=1):
                                pagination=pagination)
 
     if not current_user.can(Permission.READ_ALL_REPORT):
-        qst = qst(author__department=current_user__department)
+        qst = qst(author__in=[
+            user.username for user in User.objects(department=current_user.department)])
 
     form.start_at.data = get_this_monday()
     form.end_at.data = datetime.now()+timedelta(hours=24)
