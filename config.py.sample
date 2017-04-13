@@ -1,18 +1,16 @@
 import os
+basedir = os.path.abspath(os.path.dirname(__file__))
 
 
-class ProductionConfig:
+class Config:
     SECRET_KEY = os.environ.get('SECRET_KEY') or 'nobody knows the password'
     PER_PAGE = 10
-    FLASK_ADMIN_EMAIL = "<email>"
 
-    MONGODB_SETTINGS = {
-        'db': 'wr',
-        'host': 'localhost',
-        'port': 27017,
-        'username': 'wr_usr',
-        'password': 'wr_pwd',
-    }
+    SQLALCHEMY_COMMIT_ON_TEARDOWN = True
+    SQLALCHEMY_TRACK_MODIFICATIONS = False
+    SQLALCHEMY_RECORD_QUERIES = True
+
+    FLASK_ADMIN_EMAIL = "codingcrush@163.com"
 
     IMAGE_UPLOAD_DIR = 'static/upload/'
     UPLOAD_FOLDER = os.path.join(
@@ -28,29 +26,26 @@ class ProductionConfig:
     def init_app(app):
         pass
 
+
+class ProductionConfig(Config):
+    DEBUG = False
+    SQLALCHEMY_DATABASE_URI = os.environ.get('PRD_DATABASE_URL') or \
+        'postgresql://postgres:postgres@localhost/wr_prd'
+
     DEPARTMENTS = (
-        '人力资源部',
-        '行政部',
+        '人事部',
         '测试部',
     )
 
     PROJECTS = (
-        'project1',
-        'project2',
-        'project3',
+        '其他',
     )
 
 
-class DevelopmentConfig(ProductionConfig):
+class DevelopmentConfig(Config):
     DEBUG = True
-    MONGODB_SETTINGS = {
-        'db': 'wr-dev',
-        'host': 'localhost',
-        'port': 27017,
-        'username': 'wr_usr',
-        'password': 'wr_pwd',
-    }
-
+    SQLALCHEMY_DATABASE_URI = os.environ.get('DEV_DATABASE_URL') or \
+        'sqlite:///' + os.path.join(basedir, 'wr_dev.sqlite')
 
 config = {
     'default': DevelopmentConfig,

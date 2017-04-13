@@ -1,6 +1,7 @@
 Config.py
 .idea/
 mongo_data/
+pg96_data/
 logs/awsgi.log
 mongo/
 *.sqlite

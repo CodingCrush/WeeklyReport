@@ -21,5 +21,5 @@ WORKDIR /opt/weeklyreport
 #            --net='host' \
 #            -v /etc/localtime:/etc/localtime:ro \
 #            -v $PWD:/opt/weeklyreport \
-#            weeklyreport:20170412 \
-#            gunicorn --bind 0.0.0.0:10080 -w 2 wsgi:app --log-file logs/awsgi.log
+#            weeklyreport:yymmdd \
+#            gunicorn --bind 0.0.0.0:8000 -w 2 wsgi:app --log-file logs/awsgi.log
