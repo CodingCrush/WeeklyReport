@@ -11,7 +11,7 @@ from .forms import LoginForm, RegistrationForm, ChangePasswordForm
 def login():
     form = LoginForm()
     if form.validate_on_submit():
-        user = User.objects(email=form.email.data).first()
+        user = User.query.filter_by(email=form.email.data).first()
         if user and user.verify_password(form.password.data):
             login_user(user, form.remember_me.data)
             return redirect(url_for('main.index'))
@@ -30,16 +30,17 @@ def logout():
 def register():
     form = RegistrationForm()
     form.department.choices = [
-        (str(dept.id), dept.name) for dept in Department.objects.all()]
+        (str(dept.id), dept.name) for dept in Department.query.all()]
 
     if form.validate_on_submit():
         user = User(
             email=form.email.data,
             username=form.username.data,
             password=form.password.data,
-            role=Role.objects(name='EMPLOYEE').first(),
-            department=Department.objects.get(id=form.department.data))
-        user.save()
+            role=Role.query.filter_by(name='EMPLOYEE').first(),
+            department=Department.query.get(form.department.data))
+        db.session.add(user)
+        db.session.commit()
         login_user(user, False)
         flash('成功注册，请登录')
         return redirect(url_for('auth.login'))
@@ -51,12 +52,9 @@ def register():
 def change_password():
     form = ChangePasswordForm()
     if form.validate_on_submit():
-        print(current_user.password_hash)
         if current_user.verify_password(form.old_password.data):
-            import pdb;pdb.set_trace()
             current_user.password = form.password.data
-            # session.clear()
-            # session.modified=True
-            print(current_user.password_hash)
+            db.session.add(current_user)
+            flash('您的密码已更新')
             return redirect(url_for('main.index'))
     return render_template("auth/change_password.html", form=form)

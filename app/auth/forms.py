@@ -29,11 +29,11 @@ class RegistrationForm(FlaskForm):
     submit = SubmitField('注册')
 
     def validate_username(self, field):
-        if User.objects(name=field.data):
+        if User.query.filter_by(username=field.data).first():
             raise ValidationError('姓名已被注册')
 
     def validate_email(self, field):
-        if User.objects(email=field.data):
+        if User.query.filter_by(email=field.data).first():
             raise ValidationError('邮箱已被注册')
 
 

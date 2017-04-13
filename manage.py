@@ -2,10 +2,12 @@ from app import create_app, db
 from flask_script import Manager, Shell
 import os
 from app.models import Role, Department, Project, Report
+from flask_migrate import Migrate, MigrateCommand
 
 
 app = create_app(os.getenv('FLASK_CONFIG') or 'default')
 manager = Manager(app)
+migrate = Migrate(app, db)
 
 
 def make_shell_context():
@@ -13,6 +15,7 @@ def make_shell_context():
                 Project=Project, Report=Report)
 
 manager.add_command("shell", Shell(make_context=make_shell_context))
+manager.add_command('db', MigrateCommand)
 
 
 @manager.command

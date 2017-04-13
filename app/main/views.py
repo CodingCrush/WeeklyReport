@@ -1,13 +1,13 @@
 from flask import render_template, request, Response, redirect, \
     url_for, current_app, flash
-from flask_admin.contrib.mongoengine import ModelView
+from flask_admin.contrib.sqla import ModelView
 from flask_login import current_user
 from datetime import datetime, timedelta
 import os
 from werkzeug.utils import secure_filename
 from . import main
 from .forms import ReportForm, ReportFilterForm
-from .. import admin
+from .. import admin, db
 from ..models import Permission, User, Report, Project, Department
 from ..utils import get_week_count, default_content, \
     permission_required, is_allowed_file, get_this_monday
@@ -25,31 +25,33 @@ def index():
 def write_report():
     form = ReportForm()
     form.project.choices = [
-        (str(project.id), project.name) for project in Project.objects(is_closed=False)]
+        (str(project.id), project.name) for project in Project.query.filter_by(is_closed=False)]
 
-    report = Report.objects(
-        author=current_user.username,
+    report = Report.query.filter_by(
+        author_id=current_user.id,
         week_count=get_week_count(),
         year=datetime.today().year
     ).first()
     if form.save.data and form.validate_on_submit():
         if report:
-            report.update(content=form.body.data.replace('<br>', ''),
-                          project=Project.objects.get(id=form.project.data))
+            report.content = form.body.data.replace('<br>', '')
+            report.project_id = Project.query.get(form.project.data).id
+            db.session.add(report)
         else:
-            Report(content=form.body.data.replace('<br>', ''),
-                   author=current_user.username,
-                   project=Project.objects.get(id=form.project.data),
-                   created_at=datetime.now(),
-                   week_count=get_week_count(),
-                   year=datetime.today().year,
-                   ).save()
+            report = Report(
+                content=form.body.data.replace('<br>', ''),
+                author_id=current_user.id,
+                project_id=Project.query.get(form.project.data).id,
+                week_count=get_week_count(),
+                year=datetime.today().year)
+            db.session.add(report)
+        db.session.commit()
         flash('周报提交成功')
         return redirect(url_for('main.write_report'))
 
     if report:
         form.body.data = report.content
-        form.project.data = report.project.name
+        form.project.data = report.project_id
     else:
         form.body.data = default_content
 
@@ -81,34 +83,36 @@ def upload():
 def edit_last_week_report():
     form = ReportForm()
     form.project.choices = [
-        (str(project.id), project.name) for project in Project.objects(is_closed=False)]
+        (str(project.id), project.name) for project in Project.query.filter_by(is_closed=False)]
 
     last_week = datetime.now() - timedelta(days=7)
     last_week_start_at = get_this_monday() - timedelta(days=7)
     last_week_end_at = get_this_monday()
 
-    report = Report.objects(
-        author=current_user.username,
+    report = Report.query.filter_by(
+        author_id=current_user.id,
         week_count=get_week_count(last_week),
         year=last_week.year).first()
 
     if form.save.data and form.validate_on_submit():
         if report:
             report.update(content=form.body.data.replace('<br>', ''),
-                          project=Project.objects.get(id=form.project.data))
+                          project=Project.query.get(form.project.data))
         else:
-            Report(content=form.body.data.replace('<br>', ''),
-                   author=current_user.username,
-                   project=Project.objects.get(id=form.project.data),
-                   created_at=datetime.now(),
-                   week_count=get_week_count(last_week),
-                   year=last_week.year).save()
+            report = Report(
+                content=form.body.data.replace('<br>', ''),
+                author_id=current_user.id,
+                project_id=form.project.data,
+                week_count=get_week_count(last_week),
+                year=last_week.year)
+            db.session.add(report)
+            db.session.commit()
         flash('周报提交成功')
         return redirect(url_for('main.edit_last_week_report'))
 
     if report:
         form.body.data = report.content
-        form.project.data = report.project.name
+        form.project.data = report.project_id
     else:
         form.body.data = default_content
     return render_template('write_report.html',
@@ -122,10 +126,11 @@ def edit_last_week_report():
 @main.route('/my_report/<int:page_count>', methods=['GET'])
 @permission_required(Permission.WRITE_REPORT)
 def my_report(page_count=1):
-    pagination = Report.objects(author=current_user.username).\
-        order_by('-created_at').paginate(page=page_count, per_page=current_app.config['PER_PAGE'])
-    if not Report.objects(
-            author=current_user.username,
+    pagination = Report.query.filter_by(author_id=current_user.id).order_by(
+        Report.created_at.desc()).paginate(
+        page=page_count, per_page=current_app.config['PER_PAGE'])
+    if not Report.query.filter_by(
+            author_id=current_user.id,
             week_count=get_week_count(),
             year=datetime.today().year):
         flash('您的本周周报还未提交')
@@ -142,40 +147,45 @@ def subordinate_report(page_count=1):
     department_choices = user_choices[:]
     projects_choices = user_choices[:]
 
-    user_choices.extend([(user.username, user.username) for user in User.objects.all()])
-    department_choices.extend([(str(dept.id), dept.name) for dept in Department.objects.all()])
-    projects_choices.extend([(str(proj.id), proj.name) for proj in Project.objects.all()])
+    user_choices.extend([(str(user.id), user.username) for user in User.query.all()])
+    department_choices.extend([(str(dept.id), dept.name) for dept in Department.query.all()])
+    projects_choices.extend([(str(proj.id), proj.name) for proj in Project.query.all()])
 
     form.user.choices = user_choices
     form.department.choices = department_choices
     form.project.choices = projects_choices
 
-    qst = Report.objects.all()
-    if form.validate_on_submit():
-        if not form.user.data == '*':
-            qst = qst(author=form.user.data)
-        if not form.project.data == '*':
-            qst = qst(project=Project.objects.get(id=form.project.data))
-        if not form.department.data == '*':
-            users = User.objects(department=Department.objects.get(id=form.department.data))
-            qst = qst(author__in=[user.username for user in users])
-        pagination = qst(created_at__lte=form.end_at.data,
-                         created_at__gte=form.start_at.data).order_by(
-            '-created_at').paginate(page=page_count,
-                                    per_page=current_app.config['PER_PAGE'])
+    qst = Report.query.filter_by()
 
+    if form.validate_on_submit():
+        qst = qst.filter(Report.created_at.between(
+            form.start_at.data, form.end_at.data))
+
+        if not form.department.data == '*':
+            ids = [user.id for user in User.query.filter_by(
+                department_id=form.department.data)]
+            qst = qst.filter(Report.author_id.in_(ids))
+
+        if not form.user.data == '*':
+            qst = qst.filter_by(author_id=form.user.data)
+        if not form.project.data == '*':
+            qst = qst.filter_by(project_id=form.project.data)
+
+        pagination = qst.paginate(
+            page=page_count, per_page=current_app.config['PER_PAGE'])
         return render_template('subordinate_report.html',
                                form=form,
                                pagination=pagination)
 
     if not current_user.can(Permission.READ_ALL_REPORT):
-        qst = qst(author__in=[
-            user.username for user in User.objects(department=current_user.department)])
+        ids = [user.id for user in User.query.filter_by(
+            department_id=current_user.department_id)]
+        qst = qst.filter(Report.author_id.in_(ids))
 
     form.start_at.data = get_this_monday()
     form.end_at.data = datetime.now()+timedelta(hours=24)
 
-    pagination = qst.order_by('-created_at').paginate(
+    pagination = qst.filter_by().order_by(Report.created_at.desc()).paginate(
             page=page_count, per_page=current_app.config['PER_PAGE'])
     return render_template('subordinate_report.html',
                            form=form,
@@ -186,19 +196,23 @@ def subordinate_report(page_count=1):
 @permission_required(Permission.READ_DEPARTMENT_REPORT)
 def statistics_report():
     if not current_user.can(Permission.READ_ALL_REPORT):
-        dept_users = [user.username for user in User.objects(
-            department=current_user.department) if user.is_authenticated]
-        submitted_users = [report.author for report in
-                           Report.objects(
-                               week_count=get_week_count(),
-                               year=datetime.today().year,
-                               author__in=dept_users)
-                           ]
+        qst = Report.query.filter_by()
+        dept_users = [user for user in User.query.filter_by(
+            department_id=current_user.department_id) if user.is_authenticated]
+        ids = [user.id for user in dept_users]
+        if ids:
+            qst = qst.filter(Report.author_id.in_(ids))
+
+        submitted_users = [
+            report.get_author_name() for report in qst.filter_by(
+                week_count=get_week_count(),
+                year=datetime.today().year)]
 
         data = {'已交': len(submitted_users),
                 '未交': len(dept_users)-len(submitted_users)}
         names = {'has_submitted': submitted_users,
-                 'not_yet': set(dept_users)-set(submitted_users)}
+                 'not_yet': set([user.username for user in dept_users]
+                                )-set(submitted_users)}
 
         return render_template('statistics_department.html',
                                data=data,
@@ -207,17 +221,23 @@ def statistics_report():
 
     stash = []
     contrast = {}
-    for dept in Department.objects.all():
-        dept_users = [user.username for user in User.objects(
-            department=dept) if user.is_authenticated]
-        submitted_users = [report.author for report in
-                           Report.objects(week_count=get_week_count(),
-                                          author__in=dept_users,
-                                          year=datetime.today().year)
-                           ]
+    for dept in Department.query.filter_by():
+        qst = Report.query.filter_by()
+        dept_users = [user for user in User.query.filter_by(
+            department_id=dept.id) if user.is_authenticated]
+        ids = [user.id for user in dept_users]
+        if ids:
+            qst = qst.filter(Report.author_id.in_(ids))
+        else:
+            qst = qst.filter(False)
+        submitted_users = [
+            report.get_author_name() for report in qst.filter_by(
+                week_count=get_week_count(),
+                year=datetime.today().year)]
 
         names = {'has_submitted': submitted_users,
-                 'not_yet': set(dept_users)-set(submitted_users)}
+                 'not_yet': set([user.username for user in dept_users]
+                                )-set(submitted_users)}
 
         stash.append({'names': names,
                       'dept_name': dept.name
@@ -238,7 +258,13 @@ class WeeklyReportModelView(ModelView):
     def inaccessible_callback(self, name, **kwargs):
         return redirect(url_for('main.index'))
 
-admin.add_view(WeeklyReportModelView(User))
-admin.add_view(WeeklyReportModelView(Report))
-admin.add_view(WeeklyReportModelView(Project))
-admin.add_view(WeeklyReportModelView(Department))
+
+class UserView(ModelView):
+    column_list = ('name', 'email', 'role_id', 'department_id', 'confirmed')
+    column_searchable_list = ('name', 'email', 'role_id', 'department_id', 'confirmed')
+    column_filters = ('name', 'email', 'role_id', 'department_id', 'confirmed')
+
+admin.add_view(ModelView(User, db.session))
+admin.add_view(ModelView(Report, db.session))
+admin.add_view(ModelView(Project, db.session))
+admin.add_view(ModelView(Department, db.session))

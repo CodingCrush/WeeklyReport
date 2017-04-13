@@ -4,8 +4,8 @@ flask_login
 flask_moment
 flask_script
 flask_wtf
-flask_mongoengine
 Flask-Mail
 flask-admin
 gunicorn
 chartkick
+SQLAlchemy
