@@ -28,3 +28,12 @@
                 -v $PWD:/opt/weeklyreport \
                 weeklyreport:yymmdd \
                 gunicorn --bind 0.0.0.0:8000 -w 2 wsgi:app --log-file logs/awsgi.log
+
+4. Enter the container to migrate database:
+    
+    docker exec -it wr-server /bin/bash
+        python3.5 manage.py shell
+            db.create_all()
+            exit
+        python3.5 manage.py deploy
+        exit
