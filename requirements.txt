@@ -8,4 +8,6 @@ Flask-Mail
 flask-admin
 gunicorn
 chartkick
-SQLAlchemy
+flask_sqlalchemy
+flask_migrate
+psycopg2
