@@ -43,8 +43,22 @@ class ChangePasswordForm(FlaskForm):
         DataRequired(), EqualTo('password2', message='两次密码不匹配')])
     password2 = PasswordField('确认新密码', validators=[DataRequired()])
     submit = SubmitField('更新密码')
-#
-#
+
+
+class ChangeUsernameForm(FlaskForm):
+    password = PasswordField('密码', validators=[
+        DataRequired()])
+    username = StringField('新用户名', validators=[
+        DataRequired(), Length(1, 64), EqualTo('username2', message='两次用户名不匹配')])
+    username2 = StringField('确认新用户名', validators=[
+        DataRequired(), Length(1, 64)])
+    submit = SubmitField('更新密码')
+
+    def validate_username(self, field):
+        if User.query.filter_by(username=field.data).first():
+            raise ValidationError('姓名已被注册')
+
+
 # class PasswordResetRequestForm(FlaskForm):
 #     email = StringField('Email', validators=[DataRequired(), Length(1, 64),
 #                                              Email()])
