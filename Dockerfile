@@ -22,4 +22,4 @@ WORKDIR /opt/weeklyreport
 #            -v /etc/localtime:/etc/localtime:ro \
 #            -v $PWD:/opt/weeklyreport \
 #            weeklyreport:yymmdd \
-#            gunicorn --bind 0.0.0.0:8000 -w 2 wsgi:app --log-file logs/awsgi.log
+#            gunicorn --bind <host>:<port> -w <N> wsgi:app --log-file logs/awsgi.log

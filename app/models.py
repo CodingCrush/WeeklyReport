@@ -34,7 +34,7 @@ class Role(db.Model):
             'BOSS': (Permission.WRITE_REPORT |
                      Permission.READ_DEPARTMENT_REPORT |
                      Permission.READ_ALL_REPORT),
-            'Administrator': 0xff,
+            'ADMINISTRATOR': 0xff,
         }
         for r in roles:
             role = Role.query.filter_by(name=r).first()
