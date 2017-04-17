@@ -96,8 +96,9 @@ def edit_last_week_report():
 
     if form.save.data and form.validate_on_submit():
         if report:
-            report.update(content=form.body.data.replace('<br>', ''),
-                          project=Project.query.get(form.project.data))
+            report.content = form.body.data.replace('<br>', '')
+            report.project_id = form.project.data
+            report.project = Project.query.get(form.project.data)
         else:
             report = Report(
                 content=form.body.data.replace('<br>', ''),
@@ -105,8 +106,8 @@ def edit_last_week_report():
                 project_id=form.project.data,
                 week_count=get_week_count(last_week),
                 year=last_week.year)
-            db.session.add(report)
-            db.session.commit()
+        db.session.add(report)
+        db.session.commit()
         flash('周报提交成功')
         return redirect(url_for('main.edit_last_week_report'))
 
@@ -258,11 +259,6 @@ class WeeklyReportModelView(ModelView):
     def inaccessible_callback(self, name, **kwargs):
         return redirect(url_for('main.index'))
 
-
-class UserView(ModelView):
-    column_list = ('name', 'email', 'role_id', 'department_id', 'confirmed')
-    column_searchable_list = ('name', 'email', 'role_id', 'department_id', 'confirmed')
-    column_filters = ('name', 'email', 'role_id', 'department_id', 'confirmed')
 
 admin.add_view(ModelView(User, db.session))
 admin.add_view(ModelView(Report, db.session))

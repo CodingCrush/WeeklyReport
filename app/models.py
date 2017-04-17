@@ -23,7 +23,7 @@ class Role(db.Model):
     @staticmethod
     def insert_roles():
         roles = {
-            'BAD_GUY': Permission.DO_NOTHING,
+            'QUIT': Permission.DO_NOTHING,
             'EMPLOYEE': Permission.WRITE_REPORT,
             'MANAGER': (Permission.WRITE_REPORT |
                         Permission.READ_DEPARTMENT_REPORT |
@@ -120,7 +120,8 @@ class User(db.Model, UserMixin):
 
     @property
     def is_admin(self):
-        return self.email == current_app.config['FLASK_ADMIN_EMAIL']
+        return self.email == current_app.config['FLASK_ADMIN_EMAIL'] or \
+               self.can(Permission.ENTER_ADMIN)
 
     @property
     def is_authenticated(self):
