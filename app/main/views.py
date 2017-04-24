@@ -47,6 +47,10 @@ def write_report():
             db.session.add(report)
         db.session.commit()
         flash('周报提交成功')
+
+        current_app.logger.info(
+            '{} submitted report'.format(current_user.email))
+
         return redirect(url_for('main.write_report'))
 
     if report:
@@ -71,10 +75,18 @@ def upload():
         img.save(os.path.join(current_app.config['UPLOAD_FOLDER'], filename))
         img_url = request.url_root + current_app.config['IMAGE_UPLOAD_DIR'] + filename
         res = Response(img_url)
+
+        current_app.logger.info(
+            '{} uploaded image'.format(current_user.email))
+
     else:
         res = Response("上传失败")
     res.headers["ContentType"] = "text/html"
     res.headers["Charset"] = "utf-8"
+
+    current_app.logger.error(
+        '{} failed uploading image'.format(current_user.email))
+
     return res
 
 
@@ -109,6 +121,10 @@ def edit_last_week_report():
         db.session.add(report)
         db.session.commit()
         flash('周报提交成功')
+
+        current_app.logger.info(
+            "{} edited last week's report".format(current_user.email))
+
         return redirect(url_for('main.edit_last_week_report'))
 
     if report:

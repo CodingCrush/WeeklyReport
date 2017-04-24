@@ -128,7 +128,7 @@ class User(db.Model, UserMixin):
         return self.can(Permission.WRITE_REPORT)
 
     def __str__(self):
-        return self.username
+        return self.email
 
 
 class AnonymousUser(AnonymousUserMixin):
@@ -164,9 +164,14 @@ class Report(db.Model):
     def get_project_name(self):
         return Project.query.get(self.project_id).name
 
+    def __str__(self):
+        return 'Posted by {} at {}'.format(
+            User.query.get(self.author_id).email, self.created_at)
+
 
 @login_manager.user_loader
 def load_user(user_id):
+    assert type(user_id) == str
     return User.query.get(int(user_id))
 
 
