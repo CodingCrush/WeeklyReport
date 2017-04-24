@@ -26,12 +26,6 @@ class Config:
     def init_app(app):
         pass
 
-
-class ProductionConfig(Config):
-    DEBUG = False
-    SQLALCHEMY_DATABASE_URI = os.environ.get('PRD_DATABASE_URL') or \
-        'postgresql://postgres:postgres@localhost/wr_prd'
-
     DEPARTMENTS = (
         '人事部',
         '测试部',
@@ -42,10 +36,31 @@ class ProductionConfig(Config):
     )
 
 
+class ProductionConfig(Config):
+    DEBUG = False
+    SQLALCHEMY_DATABASE_URI = os.environ.get('PRD_DATABASE_URL') or \
+        'postgresql://postgres:postgres@localhost/wr_prd'
+
+    @classmethod
+    def init_app(cls, app):
+        super(ProductionConfig, cls).init_app(app)
+
+        import logging
+        from logging.handlers import RotatingFileHandler
+        file_handler = RotatingFileHandler('logs/weeklyreport.log', maxBytes=1024 * 1024 * 100, backupCount=20)
+        file_handler.setLevel(logging.DEBUG)
+        formatter = logging.Formatter("%(asctime)s-%(levelname)s %(message)s")
+        file_handler.setFormatter(formatter)
+        app.logger.addHandler(file_handler)
+
 class DevelopmentConfig(Config):
     DEBUG = True
     SQLALCHEMY_DATABASE_URI = os.environ.get('DEV_DATABASE_URL') or \
         'sqlite:///' + os.path.join(basedir, 'wr_dev.sqlite')
+
+    @classmethod
+    def init_app(cls, app):
+        super(DevelopmentConfig, cls).init_app(app)
 
 config = {
     'default': ProductionConfig,
