@@ -1,7 +1,8 @@
-Config.py
+config.py
 .idea/
 mongo_data/
 pg96_data/
-logs/*.log
+logs/awsgi.log
 mongo/
 *.sqlite
+upload/

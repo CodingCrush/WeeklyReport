@@ -9,8 +9,8 @@ from . import main
 from .forms import ReportForm, ReportFilterForm
 from .. import admin, db
 from ..models import Permission, User, Report, Project, Department
-from ..utils import get_week_count, default_content, \
-    permission_required, is_allowed_file, get_this_monday
+from ..utils import get_week_count, permission_required, \
+    is_allowed_file, get_this_monday
 
 
 @main.route('/', methods=['GET', 'POST'])
@@ -57,7 +57,7 @@ def write_report():
         form.body.data = report.content
         form.project.data = report.project_id
     else:
-        form.body.data = default_content
+        form.body.data = current_app.config['DEFAULT_CONTENT']
 
     return render_template('write_report.html',
                            form=form,
@@ -131,7 +131,7 @@ def edit_last_week_report():
         form.body.data = report.content
         form.project.data = report.project_id
     else:
-        form.body.data = default_content
+        form.body.data = current_app.config['DEFAULT_CONTENT']
     return render_template('write_report.html',
                            form=form,
                            week_count=get_week_count(last_week),

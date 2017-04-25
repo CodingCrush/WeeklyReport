@@ -46,7 +46,3 @@ def get_this_monday():
 def is_allowed_file(filename):
     return '.' in filename and \
            filename.rsplit('.', 1)[1] in {'png', 'jpg', 'jpeg', 'gif'}
-
-
-default_content = "<p><strong>本周工作内容:</strong></p><ol><li></li></ol>" \
-                  "<p>&nbsp;<strong>下周计划:</strong></p><ol><li></li></ol>"

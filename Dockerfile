@@ -7,9 +7,9 @@ RUN ln -s -f /usr/share/zoneinfo/Asia/Shanghai /etc/localtime && \
     curl -fsSL https://setup.ius.io/ | sh && \
     yum update -y && yum install -y net-tools ntp &&\
     yum install -y gcc gcc-c++ automake autoconf libtool make yasm && \
-    yum install -y python35u python35u-devel python35u-pip && \
+    yum install -y python36u python36u-devel python36u-pip && \
     yum install -y freetype freetype-devel libpng libpng-devel libjpeg libjpeg-devel openssl-devel &&\
-    pip3.5 install -r requirements.txt && \
+    pip3.6 install -r requirements.txt && \
     yum clean all
 WORKDIR /opt/weeklyreport
 
@@ -22,4 +22,7 @@ WORKDIR /opt/weeklyreport
 #            -v /etc/localtime:/etc/localtime:ro \
 #            -v $PWD:/opt/weeklyreport \
 #            weeklyreport:yymmdd \
-#            gunicorn --bind <host>:<port> -w <N> wsgi:app --log-file logs/awsgi.log
+#            gunicorn wsgi:app \
+#            --bind <host>:<port> \
+#            -w <N> \
+#            --log-file logs/awsgi.log
