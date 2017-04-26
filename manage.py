@@ -1,7 +1,7 @@
 from app import create_app, db
 from flask_script import Manager, Shell
 import os
-from app.models import Role, Department, Project, Report
+from app.models import Role, Department, Report
 from flask_migrate import Migrate, MigrateCommand
 
 
@@ -11,8 +11,8 @@ migrate = Migrate(app, db)
 
 
 def make_shell_context():
-    return dict(app=app, db=db, Role=Role, Department=Department,
-                Project=Project, Report=Report)
+    return dict(app=app, db=db, Role=Role,
+                Department=Department, Report=Report)
 
 manager.add_command("shell", Shell(make_context=make_shell_context))
 manager.add_command('db', MigrateCommand)
@@ -27,17 +27,5 @@ def profile(length=25, profile_dir=None):
     app.run()
 
 
-@manager.command
-def deploy():
-    """Run deployment tasks."""
-    from app.models import Role, Department, Project
-
-    # create user roles departments
-    Role.insert_roles()
-    Department.insert_departments()
-    Project.insert_projects()
-
-
 if __name__ == '__main__':
-    # app.run(debug=True)
     manager.run()

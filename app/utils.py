@@ -46,3 +46,15 @@ def get_this_monday():
 def is_allowed_file(filename):
     return '.' in filename and \
            filename.rsplit('.', 1)[1] in {'png', 'jpg', 'jpeg', 'gif'}
+
+
+def get_last_week():
+    return datetime.datetime.now() - datetime.timedelta(days=7)
+
+
+def get_last_week_start_at():
+    return get_this_monday() - datetime.timedelta(days=7)
+
+
+def get_last_week_end_at():
+    return get_this_monday()

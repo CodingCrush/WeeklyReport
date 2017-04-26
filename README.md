@@ -60,15 +60,15 @@ docker build -t weeklyreport:yymmdd .
 ```bash
 docker exec -it wr-server /bin/bash
 ```
-进入manager shell 并创建数据库表
+进入manager shell 并创建数据库表,然后初始化角色与部门数据
 ```python
-python3.5 manage.py shell
-db.create_all()
+python3.6 manage.py shell
+    db.create_all()
+    Role.insert_roles()
+    Department.insert_departments()
 exit
 ```
-导入config.py项目、部门等数据
-```python
-python3.5 manage.py deploy
+
 ```
 配置完成，打开启动container指令里的host:port地址注册用户吧
 

@@ -2,7 +2,7 @@ config.py
 .idea/
 mongo_data/
 pg96_data/
-logs/awsgi.log
+*.log
 mongo/
 *.sqlite
 upload/

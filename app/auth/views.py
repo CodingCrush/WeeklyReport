@@ -1,6 +1,5 @@
 from flask import render_template, redirect, url_for, flash, current_app
-from flask_login import login_user, logout_user, login_required, \
-    current_user
+from flask_login import login_user, logout_user, login_required, current_user
 from . import auth
 from .. import db
 from ..models import Role, Department, User
@@ -44,6 +43,11 @@ def register():
             password=form.password.data,
             role=Role.query.filter_by(name='EMPLOYEE').first(),
             department=Department.query.get(form.department.data))
+
+        if user.email == current_app.config['FLASK_ADMIN_EMAIL']:
+            user.role = Role.query.filter_by(name='ADMINISTRATOR').first()
+            user.is_ignored = True
+
         db.session.add(user)
         db.session.commit()
         login_user(user, False)

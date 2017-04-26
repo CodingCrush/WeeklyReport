@@ -1,3 +1,4 @@
+from datetime import datetime
 from flask import Flask
 from flask_admin import Admin
 from flask_bootstrap import Bootstrap
@@ -35,10 +36,17 @@ def create_app(config_name):
     from .main import main as main_blueprint
     app.register_blueprint(main_blueprint)
 
+    from .report import report as report_blueprint
+    app.register_blueprint(report_blueprint, url_prefix='/report')
+
     from .auth import auth as auth_blueprint
     app.register_blueprint(auth_blueprint, url_prefix='/auth')
 
     # chartkick support
     app.jinja_env.add_extension("chartkick.ext.charts")
+
+    # jinja env to help check statistics page under this week
+    app.jinja_env.globals.update(
+        get_this_week_count=lambda: datetime.now().isocalendar()[1])
 
     return app

@@ -10,13 +10,13 @@ class Config:
     SQLALCHEMY_TRACK_MODIFICATIONS = False
     SQLALCHEMY_RECORD_QUERIES = True
 
-    FLASK_ADMIN_EMAIL = "codingcrush@163.com"
+    FLASK_ADMIN_EMAIL = "<email-address>"
 
     IMAGE_UPLOAD_DIR = 'static/upload/'
     UPLOAD_FOLDER = os.path.join(
         os.path.dirname(os.path.abspath(__file__)), 'app/static/upload/')
 
-    MAIL_SERVER = 'smtp.163.com'
+    MAIL_SERVER = '<example:smtp.163.com>'
     MAIL_PORT = 994
     MAIL_USE_TLS = True
     MAIL_USERNAME = os.environ.get('MAIL_USERNAME')
@@ -29,10 +29,6 @@ class Config:
     DEPARTMENTS = (
         '人事部',
         '测试部',
-    )
-
-    PROJECTS = (
-        '其他',
     )
 
     DEFAULT_CONTENT = "<p><strong>本周工作内容:</strong></p><ol><li></li></ol>" \
@@ -61,6 +57,15 @@ class DevelopmentConfig(Config):
     @classmethod
     def init_app(cls, app):
         super(DevelopmentConfig, cls).init_app(app)
+
+        import logging
+        from logging.handlers import RotatingFileHandler
+        file_handler = RotatingFileHandler(
+            'logs/wr-dev.log', maxBytes=1024 * 1024 * 100, backupCount=20)
+        file_handler.setLevel(logging.DEBUG)
+        formatter = logging.Formatter("%(asctime)s-%(levelname)s %(message)s")
+        file_handler.setFormatter(formatter)
+        app.logger.addHandler(file_handler)
 
 
 config = {

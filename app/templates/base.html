@@ -40,23 +40,32 @@
                     <li><a href="{{url_for('main.index')}}">WeeklyReport</a></li>
 
                     {% if current_user.is_authenticated %}
-                        <li><a href="{{url_for('main.write_report')}}">
+                        <li><a href="{{url_for('report.write')}}">
                             <i class="fa fa-pencil" aria-hidden="true"></i>写周报
                         </a></li>
 
-                        <li><a href="{{url_for('main.my_report')}}">
+                        <li><a href="{{url_for('report.read')}}">
                             <i class="fa fa-book" aria-hidden="true"></i>我的周报
                         </a></li>
 
-                        {% if current_user.is_leader() %}
-                            <li><a href="{{url_for('main.subordinate_report')}}">
+                        {% if current_user.is_manager %}
+                            <li><a href="{{url_for('report.read_department')}}">
+                                <i class="fa fa-newspaper-o" aria-hidden="true"></i>部门周报
+                            </a></li>
+
+                            <li><a href="{{url_for('report.statistics_department')}}">
+                                <i class="fa fa-bar-chart" aria-hidden="true"></i>统计
+                            </a></li>
+                        {% endif %}
+
+                        {% if current_user.is_hr or current_user.is_admin%}
+                            <li><a href="{{url_for('report.read_crew')}}">
                                 <i class="fa fa-newspaper-o" aria-hidden="true"></i>员工周报
                             </a></li>
 
-                            <li><a href="{{url_for('main.statistics_report')}}">
+                            <li><a href="{{url_for('report.statistics_crew')}}">
                                 <i class="fa fa-bar-chart" aria-hidden="true"></i>统计
                             </a></li>
-
                         {% endif %}
 
                         {% if current_user.is_admin %}
