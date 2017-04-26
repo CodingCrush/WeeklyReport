@@ -23,9 +23,9 @@
     {% for report in pagination.items %}
     <div class="post-preview">
 
-        <a rel="tag" class="post-tag">员工:{{ report.get_author_name() }}</a>
-        <a rel="tag" class="post-tag">周次:{{ report.week_count }}</a>
-        <a rel="tag" class="post-tag">部门:{{ report.get_department_name() }}</a>
+        <a rel="tag" class="post-tag">{{_('Employee')}}:{{ report.get_author_name() }}</a>
+        <a rel="tag" class="post-tag">{{_('Week Count')}}:{{ report.week_count }}</a>
+        <a rel="tag" class="post-tag">{{_('Department')}}:{{ report.get_department_name() }}</a>
 
         {{report.content|safe}}
         <hr>

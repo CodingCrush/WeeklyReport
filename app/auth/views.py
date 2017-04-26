@@ -1,4 +1,5 @@
 from flask import render_template, redirect, url_for, flash, current_app
+from flask_babelex import lazy_gettext as _
 from flask_login import login_user, logout_user, login_required, current_user
 from . import auth
 from .. import db
@@ -26,7 +27,7 @@ def login():
 @login_required
 def logout():
     logout_user()
-    flash('您已退出')
+    flash(_('You have been logged out'))
     return redirect(url_for('main.index'))
 
 
@@ -51,7 +52,7 @@ def register():
         db.session.add(user)
         db.session.commit()
         login_user(user, False)
-        flash('成功注册，请登录')
+        flash(_('Successfully Registered, Please Login'))
 
         current_app.logger.info(
             '{} register'.format(user.email))
@@ -68,7 +69,7 @@ def change_password():
         if current_user.verify_password(form.old_password.data):
             current_user.password = form.password.data
             db.session.add(current_user)
-            flash('您的密码已更新')
+            flash(_('Your password has been updated'))
 
             current_app.logger.info(
                 '{} changes password'.format(current_user.email))
@@ -85,7 +86,7 @@ def change_username():
         if current_user.verify_password(form.password.data):
             current_user.username = form.username.data
             db.session.add(current_user)
-            flash('您的用户名已更新')
+            flash(_('Your username has been updated'))
 
             current_app.logger.info(
                 '{} changes username from {} to {}'.format(

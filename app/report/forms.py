@@ -1,3 +1,4 @@
+from flask_babelex import lazy_gettext as _
 from flask_wtf import FlaskForm
 from wtforms.validators import DataRequired
 from wtforms import SubmitField, TextAreaField, SelectField
@@ -5,21 +6,17 @@ from wtforms.fields.html5 import DateField
 
 
 class WriteForm(FlaskForm):
-    body = TextAreaField('本周工作内容与下周计划',
+    body = TextAreaField(_("This week's work content and plan of next week"),
                          validators=[DataRequired()])
-    save = SubmitField('提交')
+    submit = SubmitField(_('Submit'))
 
 
 class ReadDepartmentForm(FlaskForm):
-    user = SelectField('姓名')
-    start_at = DateField('开始', format='%Y-%m-%d')
-    end_at = DateField('结束', format='%Y-%m-%d')
-    submit = SubmitField('查询')
+    user = SelectField(_('Username'))
+    start_at = DateField(_('Start'), format='%Y-%m-%d')
+    end_at = DateField(_('End'), format='%Y-%m-%d')
+    submit = SubmitField(_('Query'))
 
 
-class ReadCrewForm(FlaskForm):
-    user = SelectField('姓名')
-    department = SelectField('部门')
-    start_at = DateField('开始', format='%Y-%m-%d')
-    end_at = DateField('结束', format='%Y-%m-%d')
-    submit = SubmitField('查询')
+class ReadCrewForm(ReadDepartmentForm):
+    department = SelectField(_('Department'))

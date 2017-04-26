@@ -1,0 +1,208 @@
+# Chinese (Simplified, China) translations for PROJECT.
+# Copyright (C) 2017 ORGANIZATION
+# This file is distributed under the same license as the PROJECT project.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2017.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: PROJECT VERSION\n"
+"Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
+"POT-Creation-Date: 2017-04-26 17:04+0800\n"
+"PO-Revision-Date: 2017-04-26 15:28+0800\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language: zh_Hans_CN\n"
+"Language-Team: zh_Hans_CN <LL@li.org>\n"
+"Plural-Forms: nplurals=1; plural=0\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 2.4.0\n"
+
+#: auth/forms.py:12 auth/forms.py:20
+msgid "Email"
+msgstr "邮箱"
+
+#: auth/forms.py:14 auth/forms.py:26 auth/forms.py:50
+msgid "Password"
+msgstr "密码"
+
+#: auth/forms.py:15
+msgid "Remember Password"
+msgstr "记住密码"
+
+#: auth/forms.py:16 report/forms.py:11
+msgid "Submit"
+msgstr "提交"
+
+#: auth/forms.py:22 report/forms.py:15
+msgid "Username"
+msgstr "姓名"
+
+#: auth/forms.py:27 auth/forms.py:44
+msgid "Passwords doesn't match"
+msgstr "两次密码不匹配"
+
+#: auth/forms.py:28
+msgid "Confirm Password"
+msgstr "确认密码"
+
+#: auth/forms.py:29 report/forms.py:22 templates/base.html:53
+#: templates/report/read.html:16 templates/report/read_crew.html:28
+#: templates/report/read_department.html:26
+msgid "Department"
+msgstr "部门"
+
+#: auth/forms.py:30 templates/auth/register.html:9
+msgid "Register"
+msgstr "注册"
+
+#: auth/forms.py:34 auth/forms.py:60
+msgid "Username has been used"
+msgstr "姓名已被使用"
+
+#: auth/forms.py:38
+msgid "Email has been registered"
+msgstr "邮箱已被注册"
+
+#: auth/forms.py:42
+msgid "Old Password"
+msgstr "旧密码"
+
+#: auth/forms.py:43
+msgid "New Password"
+msgstr "新密码"
+
+#: auth/forms.py:45
+msgid "Confirm New Password"
+msgstr "确认新密码"
+
+#: auth/forms.py:46
+msgid "Update Password"
+msgstr "更新密码"
+
+#: auth/forms.py:52
+msgid "New Username"
+msgstr "新姓名"
+
+#: auth/forms.py:53
+msgid "Usernames doesn't match"
+msgstr "两次姓名不匹配"
+
+#: auth/forms.py:54
+msgid "Confirm New Username"
+msgstr "确认新姓名"
+
+#: auth/forms.py:56
+msgid "Update Username"
+msgstr "更新姓名"
+
+#: auth/views.py:30
+msgid "You have been logged out"
+msgstr "您已注销"
+
+#: auth/views.py:55
+msgid "Successfully Registered, Please Login"
+msgstr "成功注册，请登录"
+
+#: auth/views.py:72
+msgid "Your password has been updated"
+msgstr "您的密码已更新"
+
+#: auth/views.py:89
+msgid "Your username has been updated"
+msgstr "您的用户名已更新"
+
+#: main/views.py:33
+msgid "Failed Uploading"
+msgstr "上传失败"
+
+#: report/forms.py:9
+msgid "This week's work content and plan of next week"
+msgstr "本周工作内容与下周计划"
+
+#: report/forms.py:16
+msgid "Start"
+msgstr "开始"
+
+#: report/forms.py:17
+msgid "End"
+msgstr "结束"
+
+#: report/forms.py:18
+msgid "Query"
+msgstr "查询"
+
+#: report/views.py:34 report/views.py:74
+msgid "Successfully submitted report"
+msgstr "周报提交成功"
+
+#: report/views.py:103
+msgid "You haven't submitted your weekly report"
+msgstr "您还未提交您本周的周报"
+
+#: templates/403.html:6
+msgid "Forbidden"
+msgstr "禁止访问"
+
+#: templates/404.html:6
+msgid "URL is not available"
+msgstr "URL不可用"
+
+#: templates/base.html:44
+msgid "Write"
+msgstr "写周报"
+
+#: templates/base.html:48
+msgid "My Reports"
+msgstr "我的周报"
+
+#: templates/base.html:57 templates/base.html:67
+msgid "Statistics"
+msgstr "统计"
+
+#: templates/base.html:63 templates/report/read.html:14
+#: templates/report/read_crew.html:26 templates/report/read_department.html:24
+msgid "Employee"
+msgstr "员工"
+
+#: templates/base.html:73
+msgid "Admin"
+msgstr "后台"
+
+#: templates/base.html:79
+msgid "Account"
+msgstr "账户"
+
+#: templates/auth/change_password.html:8 templates/base.html:83
+msgid "Change Password"
+msgstr "更改密码"
+
+#: templates/auth/change_username.html:8 templates/base.html:87
+msgid "Change Username"
+msgstr "更改姓名"
+
+#: templates/base.html:91
+msgid "Exit"
+msgstr "退出"
+
+#: templates/auth/login.html:9 templates/base.html:97
+msgid "Login"
+msgstr "登录"
+
+#: templates/auth/login.html:14
+msgid "New User"
+msgstr "新用户"
+
+#: templates/auth/login.html:14
+msgid "Click to Register"
+msgstr "点击注册"
+
+#: templates/report/read.html:8
+msgid "Edit Last week's report"
+msgstr "编辑上周周报"
+
+#: templates/report/read.html:15 templates/report/read_crew.html:27
+#: templates/report/read_department.html:25
+msgid "Week Count"
+msgstr "周次"
+

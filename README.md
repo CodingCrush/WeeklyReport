@@ -35,6 +35,7 @@ SECRET_KEY = "W\x1a'\xfcM\xad\xf9?U8\x9c\xa7T\x7f\xae\x11a\xd9MKE}\x81\xed"
 `'default': ProductionConfig`修改为生产环境配置，也可以用FLASK_CONFIG着一环境变量指定当前选择的环境，通常是docker启动时使用生产环境，自己在容器外使用开发环境与SQLite进行修改调试
 
 + 制作镜像
+
 在weeklyreport目录下，运行
 ```docker
 docker build -t weeklyreport:yymmdd .
@@ -42,6 +43,7 @@ docker build -t weeklyreport:yymmdd .
 `yymmdd`是日期标签，自行修改。
 
 + 启动container
+
  <host>:<port>为监听的ip与端口号
  -w <N>为开启的gunicorn　worker进程数
 ```docker
@@ -56,6 +58,7 @@ docker build -t weeklyreport:yymmdd .
 ```
 
 + 数据库初始化
+
 进入container:
 ```bash
 docker exec -it wr-server /bin/bash

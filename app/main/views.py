@@ -1,11 +1,12 @@
 from flask import request, Response, redirect, url_for, current_app
 from flask_admin.contrib.sqla import ModelView
+from flask_babelex import lazy_gettext as _
 from flask_login import current_user
 import os
 from werkzeug.utils import secure_filename
 from . import main
 from .. import admin, db
-from ..models import Permission, User, Department
+from ..models import Permission, User, Role, Department
 from ..utils import permission_required, is_allowed_file
 
 
@@ -29,7 +30,7 @@ def upload():
         current_app.logger.info(
             '{} uploaded image'.format(current_user.email))
     else:
-        res = Response("上传失败")
+        res = Response(_("Failed Uploading"))
     res.headers["ContentType"] = "text/html"
     res.headers["Charset"] = "utf-8"
 
@@ -39,7 +40,6 @@ def upload():
 
 
 class WeeklyReportModelView(ModelView):
-
     def is_accessible(self):
         return current_user.is_admin
 
@@ -47,5 +47,47 @@ class WeeklyReportModelView(ModelView):
         return redirect(url_for('main.index'))
 
 
-admin.add_view(ModelView(User, db.session))
-admin.add_view(ModelView(Department, db.session))
+class UserAdminView(WeeklyReportModelView):
+    column_labels = dict(email='邮箱', username='姓名',
+                         is_ignored='不参与统计',
+                         role='角色', department='部门')
+    form_columns = column_list = [
+        'email', 'username', 'is_ignored', 'role', 'department']
+    can_delete = False
+    can_create = False
+    form_widget_args = {
+        'email': {
+            'readonly': True
+        },
+    }
+
+
+class RoleAdminView(WeeklyReportModelView):
+    column_labels = dict(name='名称', users='成员')
+    form_columns = ['name', 'users']
+    column_list = ['name']
+    can_create = False
+    can_edit = True
+    can_delete = False
+    form_widget_args = {
+        'name': {
+            'readonly': True
+        },
+    }
+
+
+class DepartmentAdminView(WeeklyReportModelView):
+    column_labels = dict(name='名称', users='成员')
+    form_columns = ['name', 'users']
+    can_create = False
+    can_edit = True
+    can_delete = False
+    form_widget_args = {
+        'name': {
+            'readonly': True
+        },
+    }
+
+admin.add_view(UserAdminView(User, db.session, name='用户'))
+admin.add_view(RoleAdminView(Role, db.session, name='角色'))
+admin.add_view(DepartmentAdminView(Department, db.session, name='部门'))

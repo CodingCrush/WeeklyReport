@@ -1,3 +1,4 @@
+from flask_babelex import lazy_gettext as _
 from flask_wtf import FlaskForm
 from wtforms.fields.html5 import EmailField
 from wtforms import BooleanField, SubmitField, \
@@ -8,52 +9,52 @@ from ..models import User
 
 
 class LoginForm(FlaskForm):
-    email = EmailField('邮箱', validators=[
+    email = EmailField(_('Email'), validators=[
         DataRequired(), Length(2, 64)])
-    password = PasswordField('密码', validators=[DataRequired()])
-    remember_me = BooleanField('记住密码')
-    submit = SubmitField('提交')
+    password = PasswordField(_('Password'), validators=[DataRequired()])
+    remember_me = BooleanField(_('Remember Password'))
+    submit = SubmitField(_('Submit'))
 
 
 class RegistrationForm(FlaskForm):
-    email = EmailField('邮箱', validators=[
+    email = EmailField(_('Email'), validators=[
          DataRequired(), Length(1, 64)])
-    username = StringField('姓名', validators=[
+    username = StringField(_('Username'), validators=[
         DataRequired(), Length(1, 64)
         ])
 
-    password = PasswordField('密码', validators=[
-        DataRequired(), EqualTo('password2', message='两次密码不匹配')])
-    password2 = PasswordField('确认密码', validators=[DataRequired()])
-    department = SelectField('部门')
-    submit = SubmitField('注册')
+    password = PasswordField(_('Password'), validators=[
+        DataRequired(), EqualTo('password2', message=_("Passwords doesn't match"))])
+    password2 = PasswordField(_('Confirm Password'), validators=[DataRequired()])
+    department = SelectField(_('Department'))
+    submit = SubmitField(_('Register'))
 
     def validate_username(self, field):
         if User.query.filter_by(username=field.data).first():
-            raise ValidationError('姓名已被注册')
+            raise ValidationError(_('Username has been used'))
 
     def validate_email(self, field):
         if User.query.filter_by(email=field.data).first():
-            raise ValidationError('邮箱已被注册')
+            raise ValidationError(_('Email has been registered'))
 
 
 class ChangePasswordForm(FlaskForm):
-    old_password = PasswordField('旧密码', validators=[DataRequired()])
-    password = PasswordField('新密码', validators=[
-        DataRequired(), EqualTo('password2', message='两次密码不匹配')])
-    password2 = PasswordField('确认新密码', validators=[DataRequired()])
-    submit = SubmitField('更新密码')
+    old_password = PasswordField(_('Old Password'), validators=[DataRequired()])
+    password = PasswordField(_('New Password'), validators=[
+        DataRequired(), EqualTo('password2', message=_("Passwords doesn't match"))])
+    password2 = PasswordField(_('Confirm New Password'), validators=[DataRequired()])
+    submit = SubmitField(_('Update Password'))
 
 
 class ChangeUsernameForm(FlaskForm):
-    password = PasswordField('密码', validators=[
+    password = PasswordField(_('Password'), validators=[
         DataRequired()])
-    username = StringField('新用户名', validators=[
-        DataRequired(), Length(1, 64), EqualTo('username2', message='两次用户名不匹配')])
-    username2 = StringField('确认新用户名', validators=[
+    username = StringField(_('New Username'), validators=[
+        DataRequired(), Length(1, 64), EqualTo('username2', message=_("Usernames doesn't match"))])
+    username2 = StringField(_('Confirm New Username'), validators=[
         DataRequired(), Length(1, 64)])
-    submit = SubmitField('更新用户名')
+    submit = SubmitField(_('Update Username'))
 
     def validate_username(self, field):
         if User.query.filter_by(username=field.data).first():
-            raise ValidationError('姓名已被注册')
+            raise ValidationError(_('Username has been used'))

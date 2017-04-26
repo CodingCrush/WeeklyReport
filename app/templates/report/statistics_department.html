@@ -11,7 +11,9 @@
 <div class="post-preview">
     <h3>第{{ week_count }}周({{start_at}}至{{end_at}})工作周报
         {% if get_this_week_count() == week_count %}
-            <a href="{{url_for('report.statistics_department_last_week')}}">(查看上周)</a>
+            <a href="{{url_for('report.statistics_department_last_week')}}">
+                (查看上周)
+            </a>
         {% endif %}
     </h3>
     <hr>

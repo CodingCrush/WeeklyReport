@@ -1,9 +1,8 @@
 from app import create_app, db
-from flask_script import Manager, Shell
-import os
 from app.models import Role, Department, Report
 from flask_migrate import Migrate, MigrateCommand
-
+from flask_script import Manager, Shell
+import os
 
 app = create_app(os.getenv('FLASK_CONFIG') or 'default')
 manager = Manager(app)

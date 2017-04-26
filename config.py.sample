@@ -10,7 +10,7 @@ class Config:
     SQLALCHEMY_TRACK_MODIFICATIONS = False
     SQLALCHEMY_RECORD_QUERIES = True
 
-    FLASK_ADMIN_EMAIL = "<email-address>"
+    FLASK_ADMIN_EMAIL = "<EMAIL@ADDRESS>"
 
     IMAGE_UPLOAD_DIR = 'static/upload/'
     UPLOAD_FOLDER = os.path.join(

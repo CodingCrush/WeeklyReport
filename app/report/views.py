@@ -1,4 +1,5 @@
 from flask import render_template, redirect, url_for, current_app, flash
+from flask_babelex import lazy_gettext as _
 from flask_login import current_user
 from datetime import datetime, timedelta
 from . import report
@@ -18,7 +19,7 @@ def write():
         week_count=get_week_count(),
         year=datetime.today().year
     ).first()
-    if form.save.data and form.validate_on_submit():
+    if form.submit.data and form.validate_on_submit():
         if report:
             report.content = form.body.data.replace('<br>', '')
             db.session.add(report)
@@ -30,7 +31,7 @@ def write():
                 year=datetime.today().year)
             db.session.add(report)
         db.session.commit()
-        flash('周报提交成功')
+        flash(_('Successfully submitted report'))
 
         current_app.logger.info(
             '{} submitted report'.format(current_user.email))
@@ -59,7 +60,7 @@ def write_last_week():
         week_count=get_week_count(get_last_week()),
         year=get_last_week().year).first()
 
-    if form.save.data and form.validate_on_submit():
+    if form.submit.data and form.validate_on_submit():
         if report:
             report.content = form.body.data.replace('<br>', '')
         else:
@@ -70,7 +71,7 @@ def write_last_week():
                 year=get_last_week().year)
         db.session.add(report)
         db.session.commit()
-        flash('周报提交成功')
+        flash(_('Successfully submitted report'))
 
         current_app.logger.info(
             "{} edited last week's report".format(current_user.email))
@@ -99,7 +100,7 @@ def read(page_count=1):
             author_id=current_user.id,
             week_count=get_week_count(),
             year=datetime.today().year):
-        flash('您的本周周报还未提交')
+        flash(_("You haven't submitted your weekly report"))
     return render_template('report/read.html', pagination=pagination)
 
 
@@ -203,8 +204,8 @@ def statistics_department():
             week_count=get_week_count(),
             year=datetime.today().year)]
 
-    data = {'已交': len(submitted_users),
-            '未交': len(dept_users)-len(submitted_users)}
+    data = {'submitted': len(submitted_users),
+            'unsubmitted': len(dept_users)-len(submitted_users)}
     names = {'has_submitted': submitted_users,
              'not_yet': set([user.username for user in dept_users]
                             )-set(submitted_users)}
@@ -269,8 +270,8 @@ def statistics_department_last_week():
             week_count=get_week_count(get_last_week()),
             year=get_last_week().year)]
 
-    data = {'已交': len(submitted_users),
-            '未交': len(dept_users)-len(submitted_users)}
+    data = {'submitted': len(submitted_users),
+            'unsubmitted': len(dept_users)-len(submitted_users)}
     names = {'has_submitted': submitted_users,
              'not_yet': set([user.username for user in dept_users]
                             )-set(submitted_users)}

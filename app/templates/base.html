@@ -41,60 +41,60 @@
 
                     {% if current_user.is_authenticated %}
                         <li><a href="{{url_for('report.write')}}">
-                            <i class="fa fa-pencil" aria-hidden="true"></i>写周报
+                            <i class="fa fa-pencil" aria-hidden="true"></i>{{_('Write')}}
                         </a></li>
 
                         <li><a href="{{url_for('report.read')}}">
-                            <i class="fa fa-book" aria-hidden="true"></i>我的周报
+                            <i class="fa fa-book" aria-hidden="true"></i>{{_('My Reports')}}
                         </a></li>
 
                         {% if current_user.is_manager %}
                             <li><a href="{{url_for('report.read_department')}}">
-                                <i class="fa fa-newspaper-o" aria-hidden="true"></i>部门周报
+                                <i class="fa fa-newspaper-o" aria-hidden="true"></i>{{_('Department')}}
                             </a></li>
 
                             <li><a href="{{url_for('report.statistics_department')}}">
-                                <i class="fa fa-bar-chart" aria-hidden="true"></i>统计
+                                <i class="fa fa-bar-chart" aria-hidden="true"></i>{{_('Statistics')}}
                             </a></li>
                         {% endif %}
 
                         {% if current_user.is_hr or current_user.is_admin%}
                             <li><a href="{{url_for('report.read_crew')}}">
-                                <i class="fa fa-newspaper-o" aria-hidden="true"></i>员工周报
+                                <i class="fa fa-newspaper-o" aria-hidden="true"></i>{{_('Employee')}}
                             </a></li>
 
                             <li><a href="{{url_for('report.statistics_crew')}}">
-                                <i class="fa fa-bar-chart" aria-hidden="true"></i>统计
+                                <i class="fa fa-bar-chart" aria-hidden="true"></i>{{_('Statistics')}}
                             </a></li>
                         {% endif %}
 
                         {% if current_user.is_admin %}
                             <li><a href="/admin/">
-                                <i class="fa fa-cog" aria-hidden="true"></i>后台
+                                <i class="fa fa-cog" aria-hidden="true"></i>{{_('Admin')}}
                             </a></li>
                         {% endif %}
 
                         <li class="dropdown">
                         <a href="#" class="dropdown-toggle" data-toggle="dropdown">
-                            <i class="fa fa-user-circle-o" aria-hidden="true"></i>账户<b class="caret"></b>
+                            <i class="fa fa-user-circle-o" aria-hidden="true"></i>{{_('Account')}}<b class="caret"></b>
                         </a>
                             <ul class="dropdown-menu">
                                 <li><a href="{{ url_for('auth.change_password') }}">
-                                    <i class="fa fa-key" aria-hidden="true"></i>修改密码</a>
+                                    <i class="fa fa-key" aria-hidden="true"></i>{{_('Change Password')}}</a>
                                 </li>
 
                                 <li><a href="{{ url_for('auth.change_username') }}">
-                                    <i class="fa fa-id-card" aria-hidden="true"></i>修改姓名</a>
+                                    <i class="fa fa-id-card" aria-hidden="true"></i>{{_('Change Username')}}</a>
                                 </li>
 
                                 <li><a href="{{ url_for('auth.logout') }}">
-                                    <i class="fa fa-sign-in" aria-hidden="true"></i>退出</a>
+                                    <i class="fa fa-sign-in" aria-hidden="true"></i>{{_('Exit')}}</a>
                                 </li>
                             </ul>
                         </li>
                     {% else %}
                         <li><a href="{{ url_for('auth.login')}}">
-                            <i class="fa fa-sign-out" aria-hidden="true"></i>登陆
+                            <i class="fa fa-sign-out" aria-hidden="true"></i>{{_('Login')}}
                         </a></li>
                     {% endif %}
                 </ul>
