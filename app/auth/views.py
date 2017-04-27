@@ -111,6 +111,10 @@ def password_reset_request():
                        'email/reset_password',
                        user=user, token=token,
                        next=request.args.get('next'))
+
+        current_app.logger.info(
+            '{} request for reset password'.format(user.email))
+
         flash(_('An email with instructions to reset your password has been '
               'sent to ') + user.email)
         return redirect(url_for('auth.login'))
@@ -127,6 +131,10 @@ def password_reset(token):
         if user is None:
             return redirect(url_for('main.index'))
         if user.reset_password(token, form.password.data):
+
+            current_app.logger.info(
+                '{} reset password'.format(user.email))
+
             flash(_('Your password has been updated.'))
             return redirect(url_for('auth.login'))
         else:
