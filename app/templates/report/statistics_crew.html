@@ -20,7 +20,9 @@
 
     {% column_chart contrast %}
 
-    <p class="post-meta"><a>各部门未交</a></p>
+    <p class="post-meta">
+        <a>各部门未交</a>
+    </p>
     <hr>
 
     {% for dept in stash %}
@@ -38,6 +40,8 @@
         <hr>
 
     {% endfor %}
-
 </div>
+
+{{ wtf.quick_form(form) }}
+
 {% endblock %}

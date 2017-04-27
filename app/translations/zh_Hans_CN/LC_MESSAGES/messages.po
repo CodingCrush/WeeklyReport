@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2017-04-26 17:04+0800\n"
+"POT-Creation-Date: 2017-04-27 16:21+0800\n"
 "PO-Revision-Date: 2017-04-26 15:28+0800\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: zh_Hans_CN\n"
@@ -18,7 +18,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: Babel 2.4.0\n"
 
-#: auth/forms.py:12 auth/forms.py:20
+#: auth/forms.py:12 auth/forms.py:20 auth/forms.py:65 auth/forms.py:74
 msgid "Email"
 msgstr "邮箱"
 
@@ -56,7 +56,7 @@ msgstr "部门"
 msgid "Register"
 msgstr "注册"
 
-#: auth/forms.py:34 auth/forms.py:60
+#: auth/forms.py:34 auth/forms.py:61
 msgid "Username has been used"
 msgstr "姓名已被使用"
 
@@ -68,7 +68,7 @@ msgstr "邮箱已被注册"
 msgid "Old Password"
 msgstr "旧密码"
 
-#: auth/forms.py:43
+#: auth/forms.py:43 auth/forms.py:76
 msgid "New Password"
 msgstr "新密码"
 
@@ -84,33 +84,53 @@ msgstr "更新密码"
 msgid "New Username"
 msgstr "新姓名"
 
-#: auth/forms.py:53
+#: auth/forms.py:54
 msgid "Usernames doesn't match"
 msgstr "两次姓名不匹配"
 
-#: auth/forms.py:54
+#: auth/forms.py:55
 msgid "Confirm New Username"
 msgstr "确认新姓名"
 
-#: auth/forms.py:56
+#: auth/forms.py:57
 msgid "Update Username"
 msgstr "更新姓名"
 
-#: auth/views.py:30
+#: auth/forms.py:66 auth/forms.py:80 templates/auth/reset_password.html:9
+msgid "Reset Password"
+msgstr "重置密码"
+
+#: auth/forms.py:70 auth/forms.py:84
+msgid "Unknown email address"
+msgstr "未知密码"
+
+#: auth/forms.py:78
+msgid "Confirm New password"
+msgstr "确认新密码"
+
+#: auth/views.py:32
 msgid "You have been logged out"
 msgstr "您已注销"
 
-#: auth/views.py:55
+#: auth/views.py:57
 msgid "Successfully Registered, Please Login"
 msgstr "成功注册，请登录"
 
-#: auth/views.py:72
+#: auth/views.py:74
 msgid "Your password has been updated"
 msgstr "您的密码已更新"
 
-#: auth/views.py:89
+#: auth/views.py:91
 msgid "Your username has been updated"
 msgstr "您的用户名已更新"
+
+#: auth/views.py:114
+msgid "An email with instructions to reset your password has been sent to "
+msgstr "密码重置邮件已发送到您的邮箱　"
+
+#: auth/views.py:130
+msgid "Your password has been updated."
+msgstr "您的密码已更新"
 
 #: main/views.py:33
 msgid "Failed Uploading"
@@ -132,13 +152,21 @@ msgstr "结束"
 msgid "Query"
 msgstr "查询"
 
-#: report/views.py:34 report/views.py:74
+#: report/forms.py:26
+msgid "Send Reminder Email"
+msgstr "发送催交邮件"
+
+#: report/views.py:36 report/views.py:76
 msgid "Successfully submitted report"
 msgstr "周报提交成功"
 
-#: report/views.py:103
+#: report/views.py:105
 msgid "You haven't submitted your weekly report"
 msgstr "您还未提交您本周的周报"
+
+#: report/views.py:300 report/views.py:353
+msgid "Email has been sent to:"
+msgstr "邮件已发送至："
 
 #: templates/403.html:6
 msgid "Forbidden"
@@ -193,9 +221,17 @@ msgstr "登录"
 msgid "New User"
 msgstr "新用户"
 
-#: templates/auth/login.html:14
+#: templates/auth/login.html:15
 msgid "Click to Register"
 msgstr "点击注册"
+
+#: templates/auth/login.html:17
+msgid "Forget Password"
+msgstr "忘记密码"
+
+#: templates/auth/login.html:18
+msgid "Click to Rest Password"
+msgstr "点击重置密码"
 
 #: templates/report/read.html:8
 msgid "Edit Last week's report"

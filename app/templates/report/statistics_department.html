@@ -28,7 +28,7 @@
             <a rel="tag" class="post-red-tag">{{ name }}</a>
         {% endfor %}
     {% pie_chart data %}
-    <p class="post-meta">{{ current_user.get_department_name() }}</a></p>
+    <p class="post-meta">{{ current_user.department.name }}</a></p>
     <hr>
 
 </div>

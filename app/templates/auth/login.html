@@ -11,7 +11,12 @@
         {{ wtf.quick_form(form) }}
         <br>
 
-        <p>{{_("New User")}}? <a href="{{ url_for('auth.register') }}">{{_("Click to Register")}}</a>.</p>
+        <p>{{_("New User")}}?
+            <a href="{{ url_for('auth.register') }}">{{_("Click to Register")}}
+        </a>.</p>
+        <p>{{_("Forget Password")}}?
+            <a href="{{ url_for('auth.password_reset_request') }}">{{_("Click to Rest Password")}}
+        </a></p>
 
     </div>
 

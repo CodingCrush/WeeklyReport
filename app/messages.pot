@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2017-04-26 17:07+0800\n"
+"POT-Creation-Date: 2017-04-27 16:21+0800\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -16,7 +16,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: Babel 2.4.0\n"
 
-#: auth/forms.py:12 auth/forms.py:20
+#: auth/forms.py:12 auth/forms.py:20 auth/forms.py:65 auth/forms.py:74
 msgid "Email"
 msgstr ""
 
@@ -54,7 +54,7 @@ msgstr ""
 msgid "Register"
 msgstr ""
 
-#: auth/forms.py:34 auth/forms.py:60
+#: auth/forms.py:34 auth/forms.py:61
 msgid "Username has been used"
 msgstr ""
 
@@ -66,7 +66,7 @@ msgstr ""
 msgid "Old Password"
 msgstr ""
 
-#: auth/forms.py:43
+#: auth/forms.py:43 auth/forms.py:76
 msgid "New Password"
 msgstr ""
 
@@ -82,32 +82,52 @@ msgstr ""
 msgid "New Username"
 msgstr ""
 
-#: auth/forms.py:53
+#: auth/forms.py:54
 msgid "Usernames doesn't match"
 msgstr ""
 
-#: auth/forms.py:54
+#: auth/forms.py:55
 msgid "Confirm New Username"
 msgstr ""
 
-#: auth/forms.py:56
+#: auth/forms.py:57
 msgid "Update Username"
 msgstr ""
 
-#: auth/views.py:30
+#: auth/forms.py:66 auth/forms.py:80 templates/auth/reset_password.html:9
+msgid "Reset Password"
+msgstr ""
+
+#: auth/forms.py:70 auth/forms.py:84
+msgid "Unknown email address"
+msgstr ""
+
+#: auth/forms.py:78
+msgid "Confirm New password"
+msgstr ""
+
+#: auth/views.py:32
 msgid "You have been logged out"
 msgstr ""
 
-#: auth/views.py:55
+#: auth/views.py:57
 msgid "Successfully Registered, Please Login"
 msgstr ""
 
-#: auth/views.py:72
+#: auth/views.py:74
 msgid "Your password has been updated"
 msgstr ""
 
-#: auth/views.py:89
+#: auth/views.py:91
 msgid "Your username has been updated"
+msgstr ""
+
+#: auth/views.py:114
+msgid "An email with instructions to reset your password has been sent to "
+msgstr ""
+
+#: auth/views.py:130
+msgid "Your password has been updated."
 msgstr ""
 
 #: main/views.py:33
@@ -130,12 +150,20 @@ msgstr ""
 msgid "Query"
 msgstr ""
 
-#: report/views.py:34 report/views.py:74
+#: report/forms.py:26
+msgid "Send Reminder Email"
+msgstr ""
+
+#: report/views.py:36 report/views.py:76
 msgid "Successfully submitted report"
 msgstr ""
 
-#: report/views.py:103
+#: report/views.py:105
 msgid "You haven't submitted your weekly report"
+msgstr ""
+
+#: report/views.py:300 report/views.py:353
+msgid "Email has been sent to:"
 msgstr ""
 
 #: templates/403.html:6
@@ -191,8 +219,16 @@ msgstr ""
 msgid "New User"
 msgstr ""
 
-#: templates/auth/login.html:14
+#: templates/auth/login.html:15
 msgid "Click to Register"
+msgstr ""
+
+#: templates/auth/login.html:17
+msgid "Forget Password"
+msgstr ""
+
+#: templates/auth/login.html:18
+msgid "Click to Rest Password"
 msgstr ""
 
 #: templates/report/read.html:8

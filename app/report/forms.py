@@ -20,3 +20,7 @@ class ReadDepartmentForm(FlaskForm):
 
 class ReadCrewForm(ReadDepartmentForm):
     department = SelectField(_('Department'))
+
+
+class EmailReminderForm(FlaskForm):
+    submit = SubmitField(_('Send Reminder Email'))

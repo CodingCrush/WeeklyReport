@@ -50,7 +50,8 @@ class ChangeUsernameForm(FlaskForm):
     password = PasswordField(_('Password'), validators=[
         DataRequired()])
     username = StringField(_('New Username'), validators=[
-        DataRequired(), Length(1, 64), EqualTo('username2', message=_("Usernames doesn't match"))])
+        DataRequired(), Length(1, 64),
+        EqualTo('username2', message=_("Usernames doesn't match"))])
     username2 = StringField(_('Confirm New Username'), validators=[
         DataRequired(), Length(1, 64)])
     submit = SubmitField(_('Update Username'))
@@ -58,3 +59,26 @@ class ChangeUsernameForm(FlaskForm):
     def validate_username(self, field):
         if User.query.filter_by(username=field.data).first():
             raise ValidationError(_('Username has been used'))
+
+
+class PasswordResetRequestForm(FlaskForm):
+    email = EmailField(_('Email'), validators=[DataRequired(), Length(1, 64)])
+    submit = SubmitField(_('Reset Password'))
+
+    def validate_email(self, field):
+        if User.query.filter_by(email=field.data).first() is None:
+            raise ValidationError(_('Unknown email address'))
+
+
+class PasswordResetForm(FlaskForm):
+    email = EmailField(_('Email'),  validators=[
+        DataRequired(), Length(1, 64)])
+    password = PasswordField(_('New Password'), validators=[
+        DataRequired(), EqualTo('password2', message="Passwords doesn't match")])
+    password2 = PasswordField(_('Confirm New password'),
+                              validators=[DataRequired()])
+    submit = SubmitField(_('Reset Password'))
+
+    def validate_email(self, field):
+        if User.query.filter_by(email=field.data).first() is None:
+            raise ValidationError(_('Unknown email address'))

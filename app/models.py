@@ -3,6 +3,7 @@ from werkzeug.security import generate_password_hash, check_password_hash
 from . import db, login_manager
 from flask import current_app
 from flask_login import UserMixin, AnonymousUserMixin
+from itsdangerous import TimedJSONWebSignatureSerializer as Serializer
 
 
 class Permission:
@@ -91,6 +92,23 @@ class User(db.Model, UserMixin):
         return self.role is not None and \
                (self.role.permissions & permisson) == permisson
 
+    def generate_reset_token(self, expiration=3600):
+        s = Serializer(current_app.config['SECRET_KEY'], expiration)
+        return s.dumps({'reset': self.id})
+
+    def reset_password(self, token, new_password):
+        s = Serializer(current_app.config['SECRET_KEY'])
+        try:
+            data = s.loads(token)
+        except:
+            return False
+        if data.get('reset') != self.id:
+            return False
+        self.password = new_password
+        db.session.add(self)
+        return True
+
+
     @property
     def is_admin(self):
         return self.email == current_app.config['FLASK_ADMIN_EMAIL'] or \
@@ -121,6 +139,10 @@ class AnonymousUser(AnonymousUserMixin):
     def is_authenticated(self):
         return False
 
+    @property
+    def email(self):
+        return 'AnonymousUser'
+
 
 class Report(db.Model):
     __tablename__ = 'reports'
@@ -131,11 +153,13 @@ class Report(db.Model):
     week_count = db.Column(db.Integer)
     year = db.Column(db.Integer)
 
-    def get_author_name(self):
-        return User.query.get(self.author_id).username
+    @property
+    def author(self):
+        return User.query.get(self.author_id)
 
-    def get_department_name(self):
-        return User.query.get(self.author_id).department.name
+    @property
+    def department(self):
+        return User.query.get(self.author_id).department
 
     def __str__(self):
         return 'Posted by {} at {}'.format(

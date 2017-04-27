@@ -21,6 +21,10 @@ WORKDIR /opt/weeklyreport
 #            --net='host' \
 #            -v /etc/localtime:/etc/localtime:ro \
 #            -v $PWD:/opt/weeklyreport \
+#            -e SECRET_KEY = <SECRET_KEY> \
+#            -e MAIL_USERNAME = <EMAIL@ADDRESS> \
+#            -e MAIL_PASSWORD = <MAIL_PASSWORD> \
+#            -e FLASK_CONFIG = ProductionConfig \
 #            weeklyreport:yymmdd \
 #            gunicorn wsgi:app \
 #            --bind <host>:<port> \

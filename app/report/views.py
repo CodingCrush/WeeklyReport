@@ -3,8 +3,10 @@ from flask_babelex import lazy_gettext as _
 from flask_login import current_user
 from datetime import datetime, timedelta
 from . import report
-from .forms import WriteForm, ReadDepartmentForm, ReadCrewForm
+from .forms import WriteForm, ReadDepartmentForm, \
+    ReadCrewForm, EmailReminderForm
 from .. import db
+from ..email import send_email
 from ..models import Permission, User, Report, Department
 from ..utils import get_week_count, permission_required, get_this_monday, \
     get_last_week, get_last_week_start_at, get_last_week_end_at
@@ -136,8 +138,10 @@ def read_department(page_count=1):
     form.start_at.data = get_this_monday()
     form.end_at.data = datetime.now()+timedelta(hours=24)
 
-    pagination = qst.filter_by().order_by(Report.created_at.desc()).paginate(
+    pagination = qst.filter_by().order_by(Report.year.desc()).order_by(
+        Report.week_count.desc()).order_by(Report.created_at.desc()).paginate(
             page=page_count, per_page=current_app.config['PER_PAGE'])
+
     return render_template('report/read_department.html',
                            form=form,
                            pagination=pagination)
@@ -181,8 +185,10 @@ def read_crew(page_count=1):
     form.start_at.data = get_this_monday()
     form.end_at.data = datetime.now()+timedelta(hours=24)
 
-    pagination = qst.filter_by().order_by(Report.created_at.desc()).paginate(
+    pagination = qst.filter_by().order_by(Report.year.desc()).order_by(
+        Report.week_count.desc()).order_by(Report.created_at.desc()).paginate(
             page=page_count, per_page=current_app.config['PER_PAGE'])
+
     return render_template('report/read_crew.html',
                            form=form,
                            pagination=pagination)
@@ -200,7 +206,7 @@ def statistics_department():
     else:
         qst = qst.filter(False)
     submitted_users = [
-        report.get_author_name() for report in qst.filter_by(
+        report.author for report in qst.filter_by(
             week_count=get_week_count(),
             year=datetime.today().year)]
 
@@ -218,42 +224,6 @@ def statistics_department():
                            end_at=get_this_monday() + timedelta(days=6))
 
 
-@report.route('/statistics/crew/', methods=['GET'])
-@permission_required(Permission.READ_ALL_REPORT)
-def statistics_crew():
-    stash = []
-    contrast = {}
-    for dept in Department.query.filter_by():
-        qst = Report.query.filter_by()
-        dept_users = [user for user in User.query.filter_by(
-            department_id=dept.id) if not user.is_ignored]
-        ids = [user.id for user in dept_users]
-        if ids:
-            qst = qst.filter(Report.author_id.in_(ids))
-        else:
-            qst = qst.filter(False)
-        submitted_users = [
-            report.get_author_name() for report in qst.filter_by(
-                week_count=get_week_count(),
-                year=datetime.today().year)]
-
-        names = {'has_submitted': submitted_users,
-                 'not_yet': set([user.username for user in dept_users]
-                                )-set(submitted_users)}
-
-        stash.append({'names': names,
-                      'dept_name': dept.name
-                      })
-        contrast[dept.name] = len(dept_users) - len(submitted_users)
-
-    return render_template('report/statistics_crew.html',
-                           contrast=contrast,
-                           stash=stash,
-                           week_count=get_week_count(),
-                           start_at=get_this_monday(),
-                           end_at=get_this_monday() + timedelta(days=6))
-
-
 @report.route('/statistics/department/last_week', methods=['GET'])
 @permission_required(Permission.READ_DEPARTMENT_REPORT)
 def statistics_department_last_week():
@@ -266,7 +236,7 @@ def statistics_department_last_week():
     else:
         qst = qst.filter(False)
     submitted_users = [
-        report.get_author_name() for report in qst.filter_by(
+        report.author for report in qst.filter_by(
             week_count=get_week_count(get_last_week()),
             year=get_last_week().year)]
 
@@ -284,11 +254,13 @@ def statistics_department_last_week():
                            end_at=get_last_week_end_at() - timedelta(days=1))
 
 
-@report.route('/statistics/crew/last_week', methods=['GET'])
+@report.route('/statistics/crew/', methods=['GET', 'POST'])
 @permission_required(Permission.READ_ALL_REPORT)
-def statistics_crew_last_week():
+def statistics_crew():
     stash = []
     contrast = {}
+    reminder_emails = set()
+    form = EmailReminderForm()
     for dept in Department.query.filter_by():
         qst = Report.query.filter_by()
         dept_users = [user for user in User.query.filter_by(
@@ -298,23 +270,91 @@ def statistics_crew_last_week():
             qst = qst.filter(Report.author_id.in_(ids))
         else:
             qst = qst.filter(False)
+
         submitted_users = [
-            report.get_author_name() for report in qst.filter_by(
+            report.author for report in qst.filter_by(
                 week_count=get_week_count(get_last_week()),
                 year=get_last_week().year)]
 
-        names = {'has_submitted': submitted_users,
-                 'not_yet': set([user.username for user in dept_users]
-                                )-set(submitted_users)}
+        unsubmitted_users = set(dept_users)-set(submitted_users)
+        reminder_emails |= set([user.email for user in unsubmitted_users])
+
+        names = {'has_submitted': [user.username for user in submitted_users],
+                 'not_yet': [user.username for user in unsubmitted_users]}
 
         stash.append({'names': names,
                       'dept_name': dept.name
                       })
         contrast[dept.name] = len(dept_users) - len(submitted_users)
 
+    if form.validate_on_submit():
+        subject = 'Reminder of Report of week' + str(get_week_count()) + \
+                  ' From:' + str(get_this_monday()) + \
+                  ' To:' + str(get_this_monday() + timedelta(days=6))
+        send_email(reminder_emails, subject,
+                   'email/reminder',
+                   user=current_user,
+                   week_count=get_week_count(),
+                   start_at=get_this_monday(),
+                   end_at=get_this_monday() + timedelta(days=6))
+        flash(_('Email has been sent to:') + '\n{}'.format(reminder_emails))
+
     return render_template('report/statistics_crew.html',
                            contrast=contrast,
                            stash=stash,
+                           week_count=get_week_count(),
+                           form=form,
+                           start_at=get_this_monday(),
+                           end_at=get_this_monday() + timedelta(days=6))
+
+
+@report.route('/statistics/crew/last_week', methods=['GET', 'POST'])
+@permission_required(Permission.READ_ALL_REPORT)
+def statistics_crew_last_week():
+    stash = []
+    contrast = {}
+    reminder_emails = set()
+    form = EmailReminderForm()
+    for dept in Department.query.filter_by():
+        qst = Report.query.filter_by()
+        dept_users = [user for user in User.query.filter_by(
+            department_id=dept.id) if not user.is_ignored]
+        ids = [user.id for user in dept_users]
+        if ids:
+            qst = qst.filter(Report.author_id.in_(ids))
+        else:
+            qst = qst.filter(False)
+
+        submitted_users = [
+            report.author for report in qst.filter_by(
+                week_count=get_week_count(get_last_week()),
+                year=get_last_week().year)]
+
+        unsubmitted_users = set(dept_users)-set(submitted_users)
+        reminder_emails |= set([user.email for user in unsubmitted_users])
+
+        names = {'has_submitted': [user.username for user in submitted_users],
+                 'not_yet': [user.username for user in unsubmitted_users]}
+
+        stash.append({'names': names,
+                      'dept_name': dept.name})
+        contrast[dept.name] = len(dept_users) - len(submitted_users)
+
+    if form.validate_on_submit():
+        subject = 'Reminder of Report of week' + str(get_week_count(get_last_week())) + \
+                  ' From:' + str(get_last_week_start_at()) + \
+                  ' To:' + str(get_last_week_end_at() - timedelta(days=1))
+        send_email(reminder_emails, subject,
+                   'email/reminder',
+                   user=current_user,
+                   week_count=get_week_count(get_last_week()),
+                   start_at=get_last_week_start_at(),
+                   end_at=get_last_week_end_at() - timedelta(days=1))
+        flash(_('Email has been sent to:') + '\n{}'.format(reminder_emails))
+    return render_template('report/statistics_crew.html',
+                           contrast=contrast,
+                           stash=stash,
+                           form=form,
                            week_count=get_week_count(get_last_week()),
                            start_at=get_last_week_start_at(),
                            end_at=get_last_week_end_at() - timedelta(days=1))

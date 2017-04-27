@@ -1,0 +1,6 @@
+Hello, Everyone!
+Please submit the report of week{{ week_count }} (From:{{start_at}} To:{{end_at}})
+
+
+By HR:{{user.email}}
+Note: replies to this email address are not monitored.
