@@ -25,6 +25,7 @@ class Config:
 
     WR_MAIL_SUBJECT_PREFIX = '[WeeklyReport]'
     WR_MAIL_SENDER = 'WeeklyReport_CY <EMAIL@ADDRESS>'
+
     @staticmethod
     def init_app(app):
         pass
@@ -51,6 +52,7 @@ class ProductionConfig(Config):
         gunicorn_error_handlers = logging.getLogger('gunicorn.error').handlers
         app.logger.handlers.extend(gunicorn_error_handlers)
         app.logger.setLevel(logging.DEBUG)
+
 
 class DevelopmentConfig(Config):
     DEBUG = True

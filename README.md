@@ -19,9 +19,10 @@ http://codingcrush.me/2017/04/16/weekly-report/
            daocloud.io/postgres:9.6
 ```
 
-+ 配置config.py
++  配置config.py
+
 复制config.py.sample重命名一份为config.py进行修改：
-`SECRET_KEY`可以这样随机产生，也可以当做环境变量在初始化容器时注入
+`SECRET_KEY`随机产生，可以当做环境变量在初始化容器时注入
 ```python
 In [1]: import os
 In [2]: os.urandom(24)
@@ -31,9 +32,11 @@ SECRET_KEY = "W\x1a'\xfcM\xad\xf9?U8\x9c\xa7T\x7f\xae\x11a\xd9MKE}\x81\xed"
 ```
 `FLASK_ADMIN_EMAIL `:修改管理员邮箱，使用这个邮箱注册的用户自动成为管理员
 `ProductionConfig:`此处需要根据不同的数据库构造SQLALCHEMY_DATABASE_URI
-`DEPARTMENTS`与`PROJECTS:`这两个元组存储着部门、项目，可以通过`python manage.py deploy`初始化到数据库中，这样用户在注册时便可以选择部门。
-`'default': ProductionConfig`修改为生产环境配置，也可以用FLASK_CONFIG着一环境变量指定当前选择的环境，通常是docker启动时使用生产环境，自己在容器外使用开发环境与SQLite进行修改调试
-
+`DEPARTMENTS`:`这个元组存储着部门列表，根据初始化到数据库中，用户在注册时便可以选择部门。
+`'default': ProductionConfig`修改为生产环境配置，也可以用FLASK_CONFIG着一环境变量指定当前选择的环境，通常是docker启动时使用生产环境，自己则在本地使用开发环境与SQLite进行修改调试
+`MAIL_USERNAME`: 用来发送邮件通知的账号
+`MAIL_PASSWORD` :密码
++ 制作镜像
 + 制作镜像
 
 在weeklyreport目录下，运行
@@ -53,8 +56,16 @@ docker build -t weeklyreport:yymmdd .
             --net='host' \
             -v /etc/localtime:/etc/localtime:ro \
             -v $PWD:/opt/weeklyreport \
+            -e SECRET_KEY = <SECRET_KEY> \
+            -e MAIL_USERNAME = <EMAIL@ADDRESS> \
+            -e MAIL_PASSWORD = <MAIL_PASSWORD> \
+            -e FLASK_CONFIG = ProductionConfig \
             weeklyreport:yymmdd \
-            gunicorn --bind <host>:<port> -w <N> wsgi:app --log-file logs/awsgi.log
+            gunicorn wsgi:app \
+            --bind <host>:<port> \
+            -w <N> \
+            --log-file logs/awsgi.log
+
 ```
 
 + 数据库初始化
@@ -76,5 +87,4 @@ exit
 配置完成，打开启动container指令里的host:port地址注册用户吧
 
 ## 后台管理
-+ 首先使用`FLASK_ADMIN_EMAIL`邮箱注册管理员账户，可以登录后台。以后其他用户注册后，可以指定角色。默认用户角色为`EMPLOYEE`，仅具有读写自己的周报的权限，`MANAGER`可以读写周报，并查看本部门所有周报。而HR可以读写周报，并查看全部门所有周报。`ADMINISTRATOR`在HR基础上增加了进入后台的功能。`QUIT`用来标识离职后的员工，无法登录也不参与到每周统计中。
-+ 项目Projects中选择is_closed后可以关闭项目，这样当写周报时便不能再绑定到该项目上，不影响HR查看历史周报
++ 首先使用`FLASK_ADMIN_EMAIL`邮箱注册管理员账户，可以登录后台。以后其他用户注册后，可以指定角色。默认用户角色为`EMPLOYEE`，仅具有读写自己的周报的权限，`MANAGER`可以读写周报，并查看本部门所有周报。而HR可以读写周报，并查看全部门所有周报。`ADMINISTRATOR`在HR基础上增加了进入后台的功能。`QUIT`用来标识离职后的员工，禁止其登录。
