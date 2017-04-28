@@ -37,7 +37,6 @@ SECRET_KEY = "W\x1a'\xfcM\xad\xf9?U8\x9c\xa7T\x7f\xae\x11a\xd9MKE}\x81\xed"
 `MAIL_USERNAME`: 用来发送邮件通知的账号
 `MAIL_PASSWORD` :密码
 + 制作镜像
-+ 制作镜像
 
 在weeklyreport目录下，运行
 ```docker

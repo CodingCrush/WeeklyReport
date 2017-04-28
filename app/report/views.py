@@ -273,8 +273,8 @@ def statistics_crew():
 
         submitted_users = [
             report.author for report in qst.filter_by(
-                week_count=get_week_count(get_last_week()),
-                year=get_last_week().year)]
+                week_count=get_week_count(),
+                year=datetime.today().year)]
 
         unsubmitted_users = set(dept_users)-set(submitted_users)
         reminder_emails |= set([user.email for user in unsubmitted_users])
@@ -283,8 +283,8 @@ def statistics_crew():
                  'not_yet': [user.username for user in unsubmitted_users]}
 
         stash.append({'names': names,
-                      'dept_name': dept.name
-                      })
+                      'dept_name': dept.name})
+
         contrast[dept.name] = len(dept_users) - len(submitted_users)
 
     if form.validate_on_submit():
