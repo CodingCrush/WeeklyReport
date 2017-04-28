@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2017-04-28 11:16+0800\n"
+"POT-Creation-Date: 2017-04-28 18:17+0800\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -45,8 +45,8 @@ msgid "Confirm Password"
 msgstr ""
 
 #: auth/forms.py:29 report/forms.py:22 templates/base.html:53
-#: templates/report/read.html:22 templates/report/read_crew.html:28
-#: templates/report/read_department.html:26
+#: templates/report/read.html:21 templates/report/read_crew.html:27
+#: templates/report/read_department.html:25
 msgid "Department"
 msgstr ""
 
@@ -239,8 +239,13 @@ msgstr ""
 msgid "Edit Last week's report"
 msgstr ""
 
-#: templates/report/read.html:21 templates/report/read_crew.html:27
-#: templates/report/read_department.html:25
+#: templates/report/read.html:22 templates/report/read_crew.html:28
+#: templates/report/read_department.html:26
 msgid "Week Count"
+msgstr ""
+
+#: templates/report/read.html:23 templates/report/read_crew.html:29
+#: templates/report/read_department.html:27
+msgid "Year"
 msgstr ""
 

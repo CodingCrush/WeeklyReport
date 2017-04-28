@@ -28,18 +28,13 @@
     <nav class="navbar navbar-default navbar-custom navbar-fixed-top">
         <div class="container-fluid">
             <!-- Brand and toggle get grouped for better mobile display -->
-            <div class="navbar-header">
-                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
-                    <span class="sr-only">Toggle navigation</span>
-                    Menu <i class="fa fa-bars"></i>
-                </button>
-            </div>
+
+            <a class="navbar-brand" href="{{url_for('main.index')}}">WeeklyReport</a>
 
             <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
-                <ul class="nav navbar-nav left">
-                    <li><a href="{{url_for('main.index')}}">WeeklyReport</a></li>
 
-                    {% if current_user.is_authenticated %}
+                {% if current_user.is_authenticated %}
+                    <ul class="nav navbar-nav">
                         <li><a href="{{url_for('report.write')}}">
                             <i class="fa fa-pencil" aria-hidden="true"></i>{{_('Write')}}
                         </a></li>
@@ -73,7 +68,9 @@
                                 <i class="fa fa-cog" aria-hidden="true"></i>{{_('Admin')}}
                             </a></li>
                         {% endif %}
+                    </ul>
 
+                    <ul class="nav navbar-nav navbar-right">
                         <li class="dropdown">
                         <a href="#" class="dropdown-toggle" data-toggle="dropdown">
                             <i class="fa fa-user-circle-o" aria-hidden="true"></i>{{_('Account')}}<b class="caret"></b>
@@ -92,12 +89,14 @@
                                 </li>
                             </ul>
                         </li>
-                    {% else %}
+                    </ul>
+                {% else %}
+                    <ul class="nav navbar-nav navbar-right">
                         <li><a href="{{ url_for('auth.login')}}">
                             <i class="fa fa-sign-out" aria-hidden="true"></i>{{_('Login')}}
                         </a></li>
-                    {% endif %}
-                </ul>
+                    </ul>
+                {% endif %}
             </div>
         </div>
         <!-- /.container -->

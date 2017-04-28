@@ -96,7 +96,7 @@ def write_last_week():
 @permission_required(Permission.WRITE_REPORT)
 def read(page_count=1):
     pagination = Report.query.filter_by(author_id=current_user.id).order_by(
-        Report.created_at.desc()).paginate(
+        Report.year.desc()).order_by(Report.week_count.desc()).paginate(
         page=page_count, per_page=current_app.config['PER_PAGE'])
     if not Report.query.filter_by(
             author_id=current_user.id,

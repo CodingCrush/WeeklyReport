@@ -16,7 +16,6 @@ class Config:
     UPLOAD_FOLDER = os.path.join(
         os.path.dirname(os.path.abspath(__file__)), 'app/static/upload/')
 
-
     MAIL_SERVER = '<example:smtp.163.com>'
     MAIL_PORT = 465
     MAIL_USE_SSL = True

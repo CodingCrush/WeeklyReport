@@ -79,7 +79,7 @@ python3.6 manage.py shell
     db.create_all()
     Role.insert_roles()
     Department.insert_departments()
-exit
+exit()
 ```
 
 ```
