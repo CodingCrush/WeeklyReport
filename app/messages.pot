@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2017-04-27 16:21+0800\n"
+"POT-Creation-Date: 2017-04-28 11:16+0800\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -45,7 +45,7 @@ msgid "Confirm Password"
 msgstr ""
 
 #: auth/forms.py:29 report/forms.py:22 templates/base.html:53
-#: templates/report/read.html:16 templates/report/read_crew.html:28
+#: templates/report/read.html:22 templates/report/read_crew.html:28
 #: templates/report/read_department.html:26
 msgid "Department"
 msgstr ""
@@ -122,11 +122,11 @@ msgstr ""
 msgid "Your username has been updated"
 msgstr ""
 
-#: auth/views.py:114
+#: auth/views.py:118
 msgid "An email with instructions to reset your password has been sent to "
 msgstr ""
 
-#: auth/views.py:130
+#: auth/views.py:138
 msgid "Your password has been updated."
 msgstr ""
 
@@ -186,7 +186,7 @@ msgstr ""
 msgid "Statistics"
 msgstr ""
 
-#: templates/base.html:63 templates/report/read.html:14
+#: templates/base.html:63 templates/report/read.html:20
 #: templates/report/read_crew.html:26 templates/report/read_department.html:24
 msgid "Employee"
 msgstr ""
@@ -231,11 +231,15 @@ msgstr ""
 msgid "Click to Rest Password"
 msgstr ""
 
-#: templates/report/read.html:8
+#: templates/report/read.html:9
+msgid "Edit This week's report"
+msgstr ""
+
+#: templates/report/read.html:12
 msgid "Edit Last week's report"
 msgstr ""
 
-#: templates/report/read.html:15 templates/report/read_crew.html:27
+#: templates/report/read.html:21 templates/report/read_crew.html:27
 #: templates/report/read_department.html:25
 msgid "Week Count"
 msgstr ""

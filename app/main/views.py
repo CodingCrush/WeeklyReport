@@ -6,7 +6,7 @@ import os
 from werkzeug.utils import secure_filename
 from . import main
 from .. import admin, db
-from ..models import Permission, User, Role, Department
+from ..models import Permission, User, Role, Report, Department
 from ..utils import permission_required, is_allowed_file
 
 
@@ -53,7 +53,7 @@ class UserAdminView(WeeklyReportModelView):
                          role='角色', department='部门')
     form_columns = column_list = [
         'email', 'username', 'is_ignored', 'role', 'department']
-    can_delete = False
+    can_delete = True
     can_create = False
     form_widget_args = {
         'email': {
@@ -79,7 +79,6 @@ class RoleAdminView(WeeklyReportModelView):
 class DepartmentAdminView(WeeklyReportModelView):
     column_labels = dict(name='名称', users='成员')
     form_columns = ['name', 'users']
-    can_create = False
     can_edit = True
     can_delete = False
     form_widget_args = {
@@ -88,6 +87,30 @@ class DepartmentAdminView(WeeklyReportModelView):
         },
     }
 
+
+class ReportAdminView(WeeklyReportModelView):
+    column_labels = dict(year='年份', week_count='周次',
+                         created_at='创建时间', content='内容',
+                         author='员工邮箱', department='部门')
+    column_list = ('author', 'department', 'year', 'week_count',
+                   'content', 'created_at')
+    form_columns = ['created_at', 'week_count', 'year', 'content']
+    can_edit = True
+    can_export = True
+    form_widget_args = {
+        'year': {
+            'readonly': True
+        },
+        'created_at': {
+            'readonly': True
+        },
+        'week_count': {
+            'readonly': True
+        },
+    }
+
+
 admin.add_view(UserAdminView(User, db.session, name='用户'))
 admin.add_view(RoleAdminView(Role, db.session, name='角色'))
+admin.add_view(ReportAdminView(Report, db.session, name='周报', endpoint="reports"))
 admin.add_view(DepartmentAdminView(Department, db.session, name='部门'))

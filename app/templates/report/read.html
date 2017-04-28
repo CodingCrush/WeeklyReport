@@ -4,12 +4,18 @@
 
 {% block page_content %}
 
-    <h3><i class="fa fa-pencil-square-o" aria-hidden="true"></i>
+    <h3>
+        <i class="fa fa-pencil-square-o" aria-hidden="true"></i>
+        <a href="{{url_for('report.write')}}">{{_("Edit This week's report")}}</a>
+
+        <i class="fa fa-pencil-square-o" aria-hidden="true"></i>
         <a href="{{url_for('report.write_last_week')}}">{{_("Edit Last week's report")}}</a>
     </h3>
     <hr>
+
     {% for report in pagination.items %}
     <div class="post-preview">
+
 
         <a rel="tag" class="post-tag">{{_('Employee')}}:{{ report.author.name }}</a>
         <a rel="tag" class="post-tag">{{_('Week Count')}}:{{ report.week_count }}</a>
@@ -17,6 +23,7 @@
 
 
         {{report.content|safe}}
+
         <hr>
     </div>
     {% endfor %}

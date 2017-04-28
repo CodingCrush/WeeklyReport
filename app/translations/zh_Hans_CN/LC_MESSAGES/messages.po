@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2017-04-27 16:21+0800\n"
+"POT-Creation-Date: 2017-04-28 11:16+0800\n"
 "PO-Revision-Date: 2017-04-26 15:28+0800\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: zh_Hans_CN\n"
@@ -47,7 +47,7 @@ msgid "Confirm Password"
 msgstr "确认密码"
 
 #: auth/forms.py:29 report/forms.py:22 templates/base.html:53
-#: templates/report/read.html:16 templates/report/read_crew.html:28
+#: templates/report/read.html:22 templates/report/read_crew.html:28
 #: templates/report/read_department.html:26
 msgid "Department"
 msgstr "部门"
@@ -124,11 +124,11 @@ msgstr "您的密码已更新"
 msgid "Your username has been updated"
 msgstr "您的用户名已更新"
 
-#: auth/views.py:114
+#: auth/views.py:118
 msgid "An email with instructions to reset your password has been sent to "
 msgstr "密码重置邮件已发送到您的邮箱　"
 
-#: auth/views.py:130
+#: auth/views.py:138
 msgid "Your password has been updated."
 msgstr "您的密码已更新"
 
@@ -188,7 +188,7 @@ msgstr "我的周报"
 msgid "Statistics"
 msgstr "统计"
 
-#: templates/base.html:63 templates/report/read.html:14
+#: templates/base.html:63 templates/report/read.html:20
 #: templates/report/read_crew.html:26 templates/report/read_department.html:24
 msgid "Employee"
 msgstr "员工"
@@ -233,11 +233,15 @@ msgstr "忘记密码"
 msgid "Click to Rest Password"
 msgstr "点击重置密码"
 
-#: templates/report/read.html:8
+#: templates/report/read.html:9
+msgid "Edit This week's report"
+msgstr "编辑本周周报"
+
+#: templates/report/read.html:12
 msgid "Edit Last week's report"
 msgstr "编辑上周周报"
 
-#: templates/report/read.html:15 templates/report/read_crew.html:27
+#: templates/report/read.html:21 templates/report/read_crew.html:27
 #: templates/report/read_department.html:25
 msgid "Week Count"
 msgstr "周次"

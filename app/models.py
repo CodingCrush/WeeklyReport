@@ -85,9 +85,6 @@ class User(db.Model, UserMixin):
     def verify_password(self, password):
         return check_password_hash(self.password_hash, password)
 
-    def get_department_name(self):
-        return Department.query.get(self.department_id).name
-
     def can(self, permisson):
         return self.role is not None and \
                (self.role.permissions & permisson) == permisson
@@ -142,6 +139,10 @@ class AnonymousUser(AnonymousUserMixin):
     @property
     def email(self):
         return 'AnonymousUser'
+
+    @property
+    def is_admin(self):
+        return False
 
 
 class Report(db.Model):
