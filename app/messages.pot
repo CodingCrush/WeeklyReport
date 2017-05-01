@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2017-04-28 18:17+0800\n"
+"POT-Creation-Date: 2017-05-01 20:18+0800\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -44,8 +44,8 @@ msgstr ""
 msgid "Confirm Password"
 msgstr ""
 
-#: auth/forms.py:29 report/forms.py:22 templates/base.html:53
-#: templates/report/read.html:21 templates/report/read_crew.html:27
+#: auth/forms.py:29 report/forms.py:22 templates/base.html:48
+#: templates/report/read.html:14 templates/report/read_crew.html:27
 #: templates/report/read_department.html:25
 msgid "Department"
 msgstr ""
@@ -158,11 +158,17 @@ msgstr ""
 msgid "Successfully submitted report"
 msgstr ""
 
-#: report/views.py:105
+#: report/views.py:102
+msgid ""
+"Do you want to <a href='/report/write/last_week'>edit last week's "
+"report?</a>"
+msgstr ""
+
+#: report/views.py:112
 msgid "You haven't submitted your weekly report"
 msgstr ""
 
-#: report/views.py:300 report/views.py:353
+#: report/views.py:307 report/views.py:360
 msgid "Email has been sent to:"
 msgstr ""
 
@@ -174,44 +180,44 @@ msgstr ""
 msgid "URL is not available"
 msgstr ""
 
-#: templates/base.html:44
+#: templates/base.html:39
 msgid "Write"
 msgstr ""
 
-#: templates/base.html:48
+#: templates/base.html:43
 msgid "My Reports"
 msgstr ""
 
-#: templates/base.html:57 templates/base.html:67
+#: templates/base.html:52 templates/base.html:62
 msgid "Statistics"
 msgstr ""
 
-#: templates/base.html:63 templates/report/read.html:20
+#: templates/base.html:58 templates/report/read.html:13
 #: templates/report/read_crew.html:26 templates/report/read_department.html:24
 msgid "Employee"
 msgstr ""
 
-#: templates/base.html:73
+#: templates/base.html:68
 msgid "Admin"
 msgstr ""
 
-#: templates/base.html:79
+#: templates/base.html:76
 msgid "Account"
 msgstr ""
 
-#: templates/auth/change_password.html:8 templates/base.html:83
+#: templates/auth/change_password.html:8 templates/base.html:80
 msgid "Change Password"
 msgstr ""
 
-#: templates/auth/change_username.html:8 templates/base.html:87
+#: templates/auth/change_username.html:8 templates/base.html:84
 msgid "Change Username"
 msgstr ""
 
-#: templates/base.html:91
+#: templates/base.html:88
 msgid "Exit"
 msgstr ""
 
-#: templates/auth/login.html:9 templates/base.html:97
+#: templates/auth/login.html:9 templates/base.html:96
 msgid "Login"
 msgstr ""
 
@@ -231,21 +237,17 @@ msgstr ""
 msgid "Click to Rest Password"
 msgstr ""
 
-#: templates/report/read.html:9
-msgid "Edit This week's report"
-msgstr ""
-
-#: templates/report/read.html:12
-msgid "Edit Last week's report"
-msgstr ""
-
-#: templates/report/read.html:22 templates/report/read_crew.html:28
+#: templates/report/read.html:15 templates/report/read_crew.html:28
 #: templates/report/read_department.html:26
 msgid "Week Count"
 msgstr ""
 
-#: templates/report/read.html:23 templates/report/read_crew.html:29
+#: templates/report/read.html:16 templates/report/read_crew.html:29
 #: templates/report/read_department.html:27
 msgid "Year"
+msgstr ""
+
+#: templates/report/read.html:20 templates/report/read.html:24
+msgid "Edit"
 msgstr ""
 

@@ -4,14 +4,7 @@
 
 {% block page_content %}
 
-    <h3>
-        <i class="fa fa-pencil-square-o" aria-hidden="true"></i>
-        <a href="{{url_for('report.write')}}">{{_("Edit This week's report")}}</a>
 
-        <i class="fa fa-pencil-square-o" aria-hidden="true"></i>
-        <a href="{{url_for('report.write_last_week')}}">{{_("Edit Last week's report")}}</a>
-    </h3>
-    <hr>
 
     {% for report in pagination.items %}
     <div class="post-preview">
@@ -21,11 +14,17 @@
         <a rel="tag" class="post-tag">{{_('Department')}}:{{ report.department.name }}</a>
         <a rel="tag" class="post-tag">{{_('Week Count')}}:{{ report.week_count }}</a>
         <a rel="tag" class="post-tag">{{_('Year')}}:{{ report.year }}</a>
-
-
         {{report.content|safe}}
 
-        <hr>
+        {% if report.is_of_current_week %}
+            <a href="{{url_for('report.write')}}" rel="tag" class="post-edit-tag">{{_('Edit')}}</a>
+        {% endif %}
+
+        {% if report.is_of_last_week %}
+            <a href="{{url_for('report.write_last_week')}}" rel="tag" class="post-edit-tag">{{_('Edit')}}</a>
+        {% endif %}
+
+        <div><hr></div>
     </div>
     {% endfor %}
 

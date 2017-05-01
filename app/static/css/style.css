@@ -234,7 +234,7 @@ text-transform
 .post-preview > a:hover,
 .post-preview > a:focus {
   text-decoration: none;
-  color: #0085a1;
+  color: #404040;
 }
 .post-preview > a > .post-title {
   font-size: 30px;
@@ -261,6 +261,21 @@ text-transform
   border-radius: 0.25em;
   background-color: #31b0d5;
   border: 1.5px solid #1bb3e9;
+}
+.post-preview > .post-edit-tag {
+  display: inline-block;
+  padding: 0.4rem 0.4rem;
+  font-size: 1.5rem;
+  line-height: 0.9;
+  color: #ffffff;
+  text-align: center;
+  white-space: nowrap;
+  vertical-align: baseline;
+  border-radius: 0.25em;
+  background-color: #a94442;
+  border: 1.5px solid #a94442;
+  float: right;
+  margin: -3rem 0;
 }
 .post-preview > .post-red-tag {
   display: inline-block;

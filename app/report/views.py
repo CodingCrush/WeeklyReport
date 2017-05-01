@@ -1,4 +1,4 @@
-from flask import render_template, redirect, url_for, current_app, flash
+from flask import render_template, redirect, url_for, current_app, flash, Markup
 from flask_babelex import lazy_gettext as _
 from flask_login import current_user
 from datetime import datetime, timedelta
@@ -95,6 +95,13 @@ def write_last_week():
 @report.route('/read/<int:page_count>', methods=['GET'])
 @permission_required(Permission.WRITE_REPORT)
 def read(page_count=1):
+    if not Report.query.filter_by(
+            author_id=current_user.id,
+            week_count=get_week_count(get_last_week()),
+            year=get_last_week().year).first():
+        flash(Markup(_("Do you want to <a href='/report/write/last_week'>"
+                       "edit last week's report?</a>")))
+
     pagination = Report.query.filter_by(author_id=current_user.id).order_by(
         Report.year.desc()).order_by(Report.week_count.desc()).paginate(
         page=page_count, per_page=current_app.config['PER_PAGE'])
