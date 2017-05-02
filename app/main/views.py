@@ -40,6 +40,8 @@ def upload():
 
 
 class WeeklyReportModelView(ModelView):
+    base_template = '/base.html'
+
     def is_accessible(self):
         return current_user.is_admin
 

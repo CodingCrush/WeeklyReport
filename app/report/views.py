@@ -142,7 +142,7 @@ def read_department(page_count=1):
                                form=form,
                                pagination=pagination)
 
-    form.start_at.data = get_this_monday()
+    form.start_at.data = get_last_week_start_at()
     form.end_at.data = datetime.now()+timedelta(hours=24)
 
     pagination = qst.filter_by().order_by(Report.year.desc()).order_by(
@@ -189,7 +189,7 @@ def read_crew(page_count=1):
                                form=form,
                                pagination=pagination)
 
-    form.start_at.data = get_this_monday()
+    form.start_at.data = get_last_week_start_at()
     form.end_at.data = datetime.now()+timedelta(hours=24)
 
     pagination = qst.filter_by().order_by(Report.year.desc()).order_by(
@@ -212,16 +212,17 @@ def statistics_department():
         qst = qst.filter(Report.author_id.in_(ids))
     else:
         qst = qst.filter(False)
+
     submitted_users = [
         report.author for report in qst.filter_by(
             week_count=get_week_count(),
             year=datetime.today().year)]
+    unsubmitted_users = set(dept_users) - set(submitted_users)
 
     data = {'submitted': len(submitted_users),
-            'unsubmitted': len(dept_users)-len(submitted_users)}
-    names = {'has_submitted': submitted_users,
-             'not_yet': set([user.username for user in dept_users]
-                            )-set(submitted_users)}
+            'unsubmitted': len(unsubmitted_users)}
+    names = {'has_submitted': [user.username for user in submitted_users],
+             'not_yet': [user.username for user in unsubmitted_users]}
 
     return render_template('report/statistics_department.html',
                            data=data,
@@ -242,16 +243,17 @@ def statistics_department_last_week():
         qst = qst.filter(Report.author_id.in_(ids))
     else:
         qst = qst.filter(False)
+
     submitted_users = [
         report.author for report in qst.filter_by(
             week_count=get_week_count(get_last_week()),
             year=get_last_week().year)]
+    unsubmitted_users = set(dept_users) - set(submitted_users)
 
     data = {'submitted': len(submitted_users),
-            'unsubmitted': len(dept_users)-len(submitted_users)}
-    names = {'has_submitted': submitted_users,
-             'not_yet': set([user.username for user in dept_users]
-                            )-set(submitted_users)}
+            'unsubmitted': len(unsubmitted_users)}
+    names = {'has_submitted': [user.username for user in submitted_users],
+             'not_yet': [user.username for user in unsubmitted_users]}
 
     return render_template('report/statistics_department.html',
                            data=data,

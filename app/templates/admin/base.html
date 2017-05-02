@@ -1,0 +1,90 @@
+{% import 'admin/layout.html' as layout with context -%}
+{% import 'admin/static.html' as admin_static with context %}
+{% extends "base.html" %}
+
+
+{% block head_script %}
+    <title>{% block title %}{% if admin_view.category %}{{ admin_view.category }} - {% endif %}{{ admin_view.name }} - {{ admin_view.admin.name }}{% endblock %}</title>
+
+    {% block head_css %}
+
+        <link href="{{ admin_static.url(filename='admin/css/bootstrap3/admin.css', v='1.1.1') }}" rel="stylesheet">
+        {% if admin_view.extra_css %}
+          {% for css_url in admin_view.extra_css %}
+            <link href="{{ css_url }}" rel="stylesheet">
+          {% endfor %}
+        {% endif %}
+
+    {% endblock %}
+    {% block head %}
+    {% endblock %}
+    {% block head_tail %}
+    {% endblock %}
+
+{% endblock %}
+
+
+
+
+{% block container %}
+    <div class="col-lg-12 col-lg-offset-0 col-md-10 col-md-offset-1">
+      {% block page_body %}
+      <div class="container">
+        <nav class="navbar navbar-default" role="navigation">
+          <!-- Brand and toggle get grouped for better mobile display -->
+          <div class="navbar-header">
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#admin-navbar-collapse">
+              <span class="sr-only">Toggle navigation</span>
+              <span class="icon-bar"></span>
+              <span class="icon-bar"></span>
+              <span class="icon-bar"></span>
+            </button>
+
+          </div>
+          <!-- navbar content -->
+          <div class="collapse navbar-collapse" id="admin-navbar-collapse">
+            {% block main_menu %}
+            <ul class="nav navbar-nav">
+              {{ layout.menu() }}
+            </ul>
+            {% endblock %}
+
+            {% block menu_links %}
+            <ul class="nav navbar-nav navbar-right">
+              {{ layout.menu_links() }}
+            </ul>
+            {% endblock %}
+            {% block access_control %}
+            {% endblock %}
+          </div>
+        </nav>
+
+        {% block messages %}
+        {{ layout.messages() }}
+        {% endblock %}
+
+        {# store the jinja2 context for form_rules rendering logic #}
+        {% set render_ctx = h.resolve_ctx() %}
+
+        {% block body %}{% endblock %}
+      </div>
+      {% endblock %}
+
+      {% block tail_js %}
+      <script src="{{ admin_static.url(filename='vendor/jquery.min.js', v='2.1.4') }}" type="text/javascript"></script>
+      <script src="{{ admin_static.url(filename='bootstrap/bootstrap3/js/bootstrap.min.js', v='3.3.5') }}" type="text/javascript"></script>
+      <script src="{{ admin_static.url(filename='vendor/moment.min.js', v='2.9.0') }}" type="text/javascript"></script>
+      <script src="{{ admin_static.url(filename='vendor/select2/select2.min.js', v='3.5.2') }}" type="text/javascript"></script>
+      {% if admin_view.extra_js %}
+        {% for js_url in admin_view.extra_js %}
+          <script src="{{ js_url }}" type="text/javascript"></script>
+        {% endfor %}
+      {% endif %}
+      {% endblock %}
+
+      {% block tail %}
+      {% endblock %}
+
+  </div>
+{% endblock %}
+
