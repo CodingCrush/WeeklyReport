@@ -125,6 +125,10 @@ def read_department(page_count=1):
 
     qst = Report.query.filter_by()
 
+    ids = [user.id for user in User.query.filter_by(
+        department_id=current_user.department_id)]
+    qst = qst.filter(Report.author_id.in_(ids))
+
     if form.validate_on_submit():
         qst = qst.filter(Report.created_at.between(
             form.start_at.data, form.end_at.data))
@@ -137,10 +141,6 @@ def read_department(page_count=1):
         return render_template('report/read_department.html',
                                form=form,
                                pagination=pagination)
-
-    ids = [user.id for user in User.query.filter_by(
-        department_id=current_user.department_id)]
-    qst = qst.filter(Report.author_id.in_(ids))
 
     form.start_at.data = get_this_monday()
     form.end_at.data = datetime.now()+timedelta(hours=24)

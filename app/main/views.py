@@ -104,9 +104,6 @@ class ReportAdminView(WeeklyReportModelView):
         'created_at': {
             'readonly': True
         },
-        'week_count': {
-            'readonly': True
-        },
     }
 
 
