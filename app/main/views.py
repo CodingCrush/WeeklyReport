@@ -95,6 +95,7 @@ class ReportAdminView(WeeklyReportModelView):
     column_list = ('author', 'department', 'year', 'week_count',
                    'content', 'created_at')
     form_columns = ['created_at', 'week_count', 'year', 'content']
+    list_template = '/admin/model/report_list_template.html'
     can_edit = True
     can_export = True
     form_widget_args = {
