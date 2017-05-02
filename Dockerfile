@@ -29,4 +29,5 @@ WORKDIR /opt/weeklyreport
 #            gunicorn wsgi:app \
 #            --bind <host>:<port> \
 #            -w <N> \
-#            --log-file logs/awsgi.log
+#            --log-file logs/awsgi.log \
+#            --log-level=DEBUG
