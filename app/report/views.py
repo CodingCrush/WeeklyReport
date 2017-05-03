@@ -1,7 +1,7 @@
 from flask import render_template, redirect, url_for, current_app, flash, Markup
 from flask_babelex import lazy_gettext as _
 from flask_login import current_user
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, date
 from . import report
 from .forms import WriteForm, ReadDepartmentForm, \
     ReadCrewForm, EmailReminderForm
@@ -120,7 +120,8 @@ def read_department(page_count=1):
     form = ReadDepartmentForm()
 
     user_choices = [('*', '*')]
-    user_choices.extend([(str(user.id), user.username) for user in User.query.all()])
+    user_choices.extend([(
+        str(user.id), user.username) for user in User.query.all()])
     form.user.choices = user_choices
 
     qst = Report.query.filter_by()
@@ -129,21 +130,14 @@ def read_department(page_count=1):
         department_id=current_user.department_id)]
     qst = qst.filter(Report.author_id.in_(ids))
 
+    form.start_at.data = get_last_week_start_at()
+    form.end_at.data = date.today()+timedelta(hours=24)
+
     if form.validate_on_submit():
         qst = qst.filter(Report.created_at.between(
             form.start_at.data, form.end_at.data))
-
         if not form.user.data == '*':
             qst = qst.filter_by(author_id=form.user.data)
-
-        pagination = qst.paginate(
-            page=page_count, per_page=current_app.config['PER_PAGE'])
-        return render_template('report/read_department.html',
-                               form=form,
-                               pagination=pagination)
-
-    form.start_at.data = get_last_week_start_at()
-    form.end_at.data = datetime.now()+timedelta(hours=24)
 
     pagination = qst.filter_by().order_by(Report.year.desc()).order_by(
         Report.week_count.desc()).order_by(Report.created_at.desc()).paginate(
@@ -163,34 +157,27 @@ def read_crew(page_count=1):
     user_choices = [('*', '*')]
     department_choices = user_choices[:]
 
-    user_choices.extend([(str(user.id), user.username) for user in User.query.all()])
-    department_choices.extend([(str(dept.id), dept.name) for dept in Department.query.all()])
+    for dept in Department.query.all():
+        department_choices.extend([(str(dept.id), dept.name)])
+        user_choices.extend([(str(user.id), user.username) for user in
+                             User.query.filter_by(department_id=dept.id)])
 
     form.user.choices = user_choices
     form.department.choices = department_choices
+    form.start_at.data = get_last_week_start_at()
+    form.end_at.data = date.today()+timedelta(hours=24)
 
     qst = Report.query.filter_by()
 
     if form.validate_on_submit():
         qst = qst.filter(Report.created_at.between(
             form.start_at.data, form.end_at.data))
-
         if not form.department.data == '*':
             ids = [user.id for user in User.query.filter_by(
                 department_id=form.department.data)]
             qst = qst.filter(Report.author_id.in_(ids))
-
         if not form.user.data == '*':
             qst = qst.filter_by(author_id=form.user.data)
-
-        pagination = qst.paginate(
-            page=page_count, per_page=current_app.config['PER_PAGE'])
-        return render_template('report/read_crew.html',
-                               form=form,
-                               pagination=pagination)
-
-    form.start_at.data = get_last_week_start_at()
-    form.end_at.data = datetime.now()+timedelta(hours=24)
 
     pagination = qst.filter_by().order_by(Report.year.desc()).order_by(
         Report.week_count.desc()).order_by(Report.created_at.desc()).paginate(

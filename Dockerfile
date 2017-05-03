@@ -1,5 +1,5 @@
 # image: weeklyreport:yymmdd
-FROM daocloud.io/centos:7
+FROM centos:7
 MAINTAINER CodingCrush
 ENV LANG en_US.UTF-8
 ADD . .
