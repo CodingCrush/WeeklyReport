@@ -9,5 +9,5 @@
            -e "LANG=en_US.UTF-8" \
            -v $(dirname "$PWD"):/opt/weeklyreport \
            -v $PWD/nginx.conf:/etc/nginx/conf.d/default.conf \
-           -v $(dirname "$PWD")/logs/nginx:/var/log/nginx \
+           -v $PWD/nginx:/var/log/nginx \
            nginx:1.13

@@ -206,8 +206,8 @@ def statistics_department():
             year=datetime.today().year)]
     unsubmitted_users = set(dept_users) - set(submitted_users)
 
-    data = {'submitted': len(submitted_users),
-            'unsubmitted': len(unsubmitted_users)}
+    data = {'已交': len(submitted_users),
+            '未交': len(unsubmitted_users)}
     names = {'has_submitted': [user.username for user in submitted_users],
              'not_yet': [user.username for user in unsubmitted_users]}
 
@@ -237,8 +237,8 @@ def statistics_department_last_week():
             year=get_last_week().year)]
     unsubmitted_users = set(dept_users) - set(submitted_users)
 
-    data = {'submitted': len(submitted_users),
-            'unsubmitted': len(unsubmitted_users)}
+    data = {'已交': len(submitted_users),
+            '未交': len(unsubmitted_users)}
     names = {'has_submitted': [user.username for user in submitted_users],
              'not_yet': [user.username for user in unsubmitted_users]}
 

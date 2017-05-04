@@ -262,6 +262,33 @@ text-transform
   background-color: #31b0d5;
   border: 1.5px solid #1bb3e9;
 }
+
+.panel-body > .post-tag {
+  display: inline-block;
+  padding: 0.4rem 0.4rem;
+  font-size: 1.5rem;
+  line-height: 0.9;
+  color: #ffffff;
+  text-align: center;
+  white-space: nowrap;
+  vertical-align: baseline;
+  border-radius: 0.25em;
+  background-color: #31b0d5;
+  border: 1.5px solid #1bb3e9;
+}
+.panel-body> .post-red-tag {
+  display: inline-block;
+  padding: 0.4rem 0.4rem;
+  font-size: 1.5rem;
+  line-height: 0.9;
+  color: #ffffff;
+  text-align: center;
+  white-space: nowrap;
+  vertical-align: baseline;
+  border-radius: 0.25em;
+  background-color: #a94442;
+  border: 1.5px solid #a94442;
+}
 .post-preview > .post-edit-tag {
   display: inline-block;
   padding: 0.4rem 0.4rem;
