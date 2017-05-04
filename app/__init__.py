@@ -4,7 +4,6 @@ from flask_admin import Admin
 from flask_babelex import Babel
 from flask_bootstrap import Bootstrap
 from flask_mail import Mail
-from flask_moment import Moment
 from flask_login import LoginManager
 from flask_sqlalchemy import SQLAlchemy
 from config import config
@@ -12,7 +11,6 @@ from .json_encoder import JSONEncoder
 
 
 bootstrap = Bootstrap()
-moment = Moment()
 mail = Mail()
 db = SQLAlchemy()
 
@@ -39,7 +37,6 @@ def create_app(config_name):
 
     mail.init_app(app)
     bootstrap.init_app(app)
-    moment.init_app(app)
     db.init_app(app)
     login_manager.init_app(app)
     babel.init_app(app)

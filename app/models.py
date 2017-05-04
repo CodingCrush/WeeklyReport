@@ -106,7 +106,6 @@ class User(db.Model, UserMixin):
         db.session.add(self)
         return True
 
-
     @property
     def is_admin(self):
         return self.email == current_app.config['FLASK_ADMIN_EMAIL'] or \
