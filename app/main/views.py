@@ -1,4 +1,6 @@
+from datetime import date
 from flask import request, Response, redirect, url_for, current_app
+from flask_admin.model import typefmt
 from flask_admin.contrib.sqla import ModelView
 from flask_babelex import lazy_gettext as _
 from flask_login import current_user
@@ -55,7 +57,7 @@ class UserAdminView(WeeklyReportModelView):
                          role='角色', department='部门')
     form_columns = column_list = [
         'email', 'username', 'is_ignored', 'role', 'department']
-    can_delete = True
+    can_delete = False
     can_create = False
     form_widget_args = {
         'email': {
@@ -96,6 +98,7 @@ class ReportAdminView(WeeklyReportModelView):
                          author='员工邮箱', department='部门')
     column_list = ('author', 'department', 'year', 'week_count',
                    'content', 'created_at')
+    column_default_sort = ('created_at', True)
     form_columns = ['created_at', 'week_count', 'year', 'content']
     list_template = '/admin/model/report_list_template.html'
     can_edit = True
@@ -109,6 +112,14 @@ class ReportAdminView(WeeklyReportModelView):
         },
     }
 
+    def date_format(view, value):
+        return value.strftime('%Y-%m-%d')
+
+    REPORT_FORMATTERS = dict(typefmt.BASE_FORMATTERS)
+    REPORT_FORMATTERS.update({
+            date: date_format
+        })
+    column_type_formatters = REPORT_FORMATTERS
 
 admin.add_view(UserAdminView(User, db.session, name='用户'))
 admin.add_view(RoleAdminView(Role, db.session, name='角色'))
