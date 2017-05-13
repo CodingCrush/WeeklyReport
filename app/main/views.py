@@ -48,7 +48,7 @@ class WeeklyReportModelView(ModelView):
         return current_user.is_admin
 
     def inaccessible_callback(self, name, **kwargs):
-        return redirect(url_for('main.index'))
+        return redirect(url_for('main.index', ))
 
 
 class UserAdminView(WeeklyReportModelView):
@@ -57,13 +57,22 @@ class UserAdminView(WeeklyReportModelView):
                          role='角色', department='部门')
     form_columns = column_list = [
         'email', 'username', 'is_ignored', 'role', 'department']
-    can_delete = False
+    can_delete = True
     can_create = False
     form_widget_args = {
         'email': {
             'readonly': True
         },
     }
+
+    def on_model_delete(self, model):
+
+        current_app.logger.info(
+            '{} deleted user:{}'.format(current_user.email, model))
+
+        for report in Report.query.filter_by(author_id=model.id):
+            db.session.delete(report)
+        db.session.commit()
 
 
 class RoleAdminView(WeeklyReportModelView):
@@ -120,6 +129,7 @@ class ReportAdminView(WeeklyReportModelView):
             date: date_format
         })
     column_type_formatters = REPORT_FORMATTERS
+
 
 admin.add_view(UserAdminView(User, db.session, name='用户'))
 admin.add_view(RoleAdminView(Role, db.session, name='角色'))

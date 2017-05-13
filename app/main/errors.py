@@ -1,4 +1,4 @@
-from flask import render_template, current_app, request
+from flask import render_template, current_app, request, redirect, url_for
 from flask_login import current_user
 from . import main
 
@@ -9,7 +9,7 @@ def forbidden(e):
     current_app.logger.error(
         '403 forbidden at {} by {} '.format(request.url, current_user.email))
 
-    return render_template('403.html'), 403
+    return redirect(url_for('main.index'))
 
 
 @main.app_errorhandler(404)
