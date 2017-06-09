@@ -48,7 +48,7 @@ class WeeklyReportModelView(ModelView):
         return current_user.is_admin
 
     def inaccessible_callback(self, name, **kwargs):
-        return redirect(url_for('main.index', ))
+        return redirect(url_for('main.index'))
 
 
 class UserAdminView(WeeklyReportModelView):

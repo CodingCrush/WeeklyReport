@@ -5,10 +5,8 @@ ENV LANG en_US.UTF-8
 ADD . .
 RUN ln -s -f /usr/share/zoneinfo/Asia/Shanghai /etc/localtime && \
     curl -fsSL https://setup.ius.io/ | sh && \
-    yum update -y && yum install -y net-tools ntp &&\
-    yum install -y gcc gcc-c++ automake autoconf libtool make yasm && \
-    yum install -y python36u python36u-devel python36u-pip && \
-    yum install -y freetype freetype-devel libpng libpng-devel libjpeg libjpeg-devel openssl-devel &&\
+    yum update -y && \
+    yum install -y ntp python36u python36u-devel python36u-pip && \
     pip3.6 install -r requirements.txt && \
     yum clean all
 WORKDIR /opt/weeklyreport
@@ -21,13 +19,5 @@ WORKDIR /opt/weeklyreport
 #            --net='host' \
 #            -v /etc/localtime:/etc/localtime:ro \
 #            -v $PWD:/opt/weeklyreport \
-#            -e SECRET_KEY = <SECRET_KEY> \
-#            -e MAIL_USERNAME = <EMAIL@ADDRESS> \
-#            -e MAIL_PASSWORD = <MAIL_PASSWORD> \
-#            -e FLASK_CONFIG = ProductionConfig \
 #            weeklyreport:yymmdd \
-#            gunicorn wsgi:app \
-#            --bind <host>:<port> \
-#            -w <N> \
-#            --log-file logs/awsgi.log \
-#            --log-level=DEBUG
+#            gunicorn wsgi:app --bind <host>:<port> -w <N> --log-file logs/awsgi.log --log-level=DEBUG

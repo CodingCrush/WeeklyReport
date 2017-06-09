@@ -26,5 +26,11 @@ def profile(length=25, profile_dir=None):
     app.run()
 
 
+@manager.command
+def deploy():
+    db.create_all()
+    Role.insert_roles()
+    Department.insert_departments()
+
 if __name__ == '__main__':
     manager.run()
