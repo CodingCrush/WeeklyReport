@@ -1,3 +1,5 @@
+个人网站的服务链接： http://106.14.125.116:10000/
+
 截图及步骤请看
 http://codingcrush.me/2017/04/16/weekly-report/
 
@@ -5,7 +7,7 @@ http://codingcrush.me/2017/04/16/weekly-report/
 + 配置数据库
 数据库没有限制，可选择使用sqlite，跳过数据库安装，方便快捷。
 ```
-    SQLALCHEMY_DATABASE_URI = 'sqlite:///' + os.path.join(basedir, 'wr_prd.sqlite')
+    SQLALCHEMY_DATABASE_URI = 'sqlite:///' + os.path.join(os.getcwd(), 'wr_prd.sqlite')
 ```
 
 项目中集成了是docker化的postgres，cd到postgres目录下，pull镜像，启动container。
@@ -46,7 +48,7 @@ SQLALCHEMY_DATABASE_URI = 'postgresql://postgres:postgres@localhost/wr_prd'
 
 `default: ProductionConfig`修改为生产环境配置，也可以用FLASK_CONFIG这个环境变量指定当前选择的环境，通常是docker启动时使用生产环境，自己在本地使用开发环境与SQLite进行修改调试
 
-`MAIL_USERNAME` : 用来发送邮件通知的账号
+`MAIL_USERNAME` : 用来发送邮件通知的邮箱账号
 
 `MAIL_PASSWORD` : 密码
 
@@ -80,7 +82,7 @@ docker build -t weeklyreport:20170609 .
 
 这时打开localhost:8000会出现错误，因为还未初始化数据库，在bash中执行初始化deploy命令
 ```bash
-docker exec wr-server bash -c 'python3.6 manage.py deploy'
+docker exec weeklyreport-server bash -c 'python3.6 manage.py deploy'
 ```
 
 配置完成，注册用户吧
