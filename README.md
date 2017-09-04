@@ -1,5 +1,3 @@
-个人网站的服务链接： http://106.14.125.116:10000/
-
 截图及步骤请看
 http://codingcrush.me/2017/04/16/weekly-report/
 
