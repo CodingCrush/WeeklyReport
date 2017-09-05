@@ -6,7 +6,6 @@ from flask_bootstrap import Bootstrap
 from flask_mail import Mail
 from flask_login import LoginManager
 from flask_sqlalchemy import SQLAlchemy
-from config import config
 from .json_encoder import JSONEncoder
 
 
@@ -30,10 +29,9 @@ def get_locale():
     return 'zh_Hans_CN'
 
 
-def create_app(config_name):
+def create_app(config_file):
 
-    app.config.from_object(config[config_name])
-    config[config_name].init_app(app)
+    app.config.from_pyfile(config_file)
 
     mail.init_app(app)
     bootstrap.init_app(app)

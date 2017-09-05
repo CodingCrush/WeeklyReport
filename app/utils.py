@@ -1,6 +1,6 @@
 import datetime
 from functools import wraps
-from flask import abort, current_app
+from flask import abort
 from flask_login import current_user
 
 
@@ -14,23 +14,6 @@ def permission_required(permission):
             return f(*args, **kwargs)
         return decorated_function
     return decorator
-
-
-def email_check(email_address):
-    def decorator(f):
-        @wraps(f)
-        def decorated_function(*args, **kwargs):
-            if not current_user.email == email_address:
-                abort(403)
-            return f(*args, **kwargs)
-        return decorated_function
-    return decorator
-
-
-def admin_required(f):
-    from .models import Permission
-    return email_check(current_app.config['FLASK_ADMIN_EMAIL'])(f) or \
-           permission_required(Permission.ADMINISTER)(f)
 
 
 def get_week_count(at=datetime.datetime.now()):

@@ -1,9 +1,9 @@
 from datetime import datetime
 from werkzeug.security import generate_password_hash, check_password_hash
-from . import db, login_manager
 from flask import current_app
 from flask_login import UserMixin, AnonymousUserMixin
 from itsdangerous import TimedJSONWebSignatureSerializer as Serializer
+from . import db, login_manager
 from .utils import get_week_count, get_last_week
 
 
@@ -74,6 +74,7 @@ class User(db.Model, UserMixin):
     is_ignored = db.Column(db.Boolean, default=False)
     role_id = db.Column(db.Integer, db.ForeignKey('roles.id'))
     department_id = db.Column(db.Integer, db.ForeignKey('departments.id'))
+    is_super_admin = db.Column(db.Boolean, default=False)
 
     @property
     def password(self):
@@ -108,8 +109,7 @@ class User(db.Model, UserMixin):
 
     @property
     def is_admin(self):
-        return self.email == current_app.config['FLASK_ADMIN_EMAIL'] or \
-               self.role.name == 'ADMINISTRATOR'
+        return self.role.name == 'ADMINISTRATOR' or self.is_super_admin
 
     @property
     def is_hr(self):

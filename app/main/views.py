@@ -10,10 +10,19 @@ from . import main
 from .. import admin, db
 from ..models import Permission, User, Role, Report, Department
 from ..utils import permission_required, is_allowed_file
+from sqlalchemy.exc import OperationalError
 
 
 @main.route('/', methods=['GET', 'POST'])
 def index():
+    # check if the database is initialized.
+    try:
+        User.query.all()
+    except OperationalError:
+        db.create_all()
+        Role.insert_roles()
+        Department.insert_departments()
+
     if not current_user.is_authenticated:
         return redirect(url_for('auth.login'))
     return redirect(url_for('report.read'))

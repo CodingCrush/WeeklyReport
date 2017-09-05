@@ -1,4 +1,4 @@
-# image: weeklyreport:<yymmdd>
+# image: weeklyreport:0.2
 FROM centos:7
 MAINTAINER CodingCrush
 ENV LANG en_US.UTF-8
@@ -16,11 +16,12 @@ WORKDIR /opt/weeklyreport
 
 
 # Start wp-server container
-# docker run \
-#            -d --restart=always \
+
+# docker run -d
+#            --restart=unless-stopped \
 #            --name weeklyreport-server \
-#            --net='host' \
+#            --net=host \
 #            -v /etc/localtime:/etc/localtime:ro \
 #            -v $PWD:/opt/weeklyreport \
-#            weeklyreport:<yymmdd> \
-#            gunicorn wsgi:app --bind <host>:<port> -w <N> --log-file logs/awsgi.log --log-level=DEBUG
+#            weeklyreport:0.2 \
+#            gunicorn wsgi:app --bind 0.0.0.0:8000 -w 2 --log-file logs/awsgi.log --log-level=DEBUG

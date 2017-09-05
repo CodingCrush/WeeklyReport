@@ -40,6 +40,8 @@ def register():
         (str(dept.id), dept.name) for dept in Department.query.all()]
 
     if form.validate_on_submit():
+        exist_users = bool(User.query.all())
+
         user = User(
             email=form.email.data,
             username=form.username.data,
@@ -47,8 +49,9 @@ def register():
             role=Role.query.filter_by(name='EMPLOYEE').first(),
             department=Department.query.get(form.department.data))
 
-        if user.email == current_app.config['FLASK_ADMIN_EMAIL']:
+        if not exist_users:
             user.role = Role.query.filter_by(name='ADMINISTRATOR').first()
+            user.is_super_admin = True
             user.is_ignored = True
 
         db.session.add(user)
