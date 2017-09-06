@@ -1,8 +1,8 @@
-截图及步骤请看
-http://codingcrush.me/2017/04/16/weekly-report/
+截图(V0.1):http://codingcrush.me/2017/04/16/weekly-report/
 
-## 配置说明
- `-w <N>`为开启的gunicorn　worker进程数
+## 快速运行
+`-w <N>`为开启的gunicorn　worker进程数
+`-p 8000:80` 主机通过8000端口访问
 
 ```bash
 git clone https://github.com/CodingCrush/WeeklyReport && \
@@ -27,10 +27,8 @@ V0.2: 简化了部署步骤
 ## 配置说明
 
 + 配置数据库
-数据库默认使用sqlite，方便快捷。
-
-或者可以使用postgres container，cd到postgres目录下，pull镜像，启动。
-数据库URI地址由数据库名、用户名、密码、主机、端口号构造。
+数据库默认使用sqlite，也可以使用postgres container，cd到postgres目录下，pull镜像，启动。
+数据库URI地址由数据库名、用户名、密码、主机、端口号组成。
 ```
 SQLALCHEMY_DATABASE_URI = 'postgresql://postgres:postgres@localhost/wr_prd'
 ```
@@ -38,9 +36,7 @@ SQLALCHEMY_DATABASE_URI = 'postgresql://postgres:postgres@localhost/wr_prd'
 
 +  配置config.py
 
-修改config.py并进行配置：
-
-`DEPARTMENTS`:`这个元组为部门列表，第一次打开时自动初始化到数据库中，用户在注册时可以选择部门。
+`DEPARTMENTS`: 这个元组为部门列表，第一次打开时自动初始化到数据库中，用户在注册时可以选择部门。
 
 `MAIL_USERNAME` : 用来发送邮件通知的邮箱账号
 
