@@ -17,11 +17,11 @@ WORKDIR /opt/weeklyreport
 
 # Start wp-server container
 
-# docker run -d
+# docker run -d \
 #            --restart=unless-stopped \
 #            --name weeklyreport-server \
-#            --net=host \
+#            -p 8000:80 \
 #            -v /etc/localtime:/etc/localtime:ro \
 #            -v $PWD:/opt/weeklyreport \
 #            weeklyreport:0.2 \
-#            gunicorn wsgi:app --bind 0.0.0.0:8000 -w 2 --log-file logs/awsgi.log --log-level=DEBUG
+#            gunicorn wsgi:app --bind 0.0.0.0:80 -w 2 --log-file logs/awsgi.log --log-level=DEBUG
