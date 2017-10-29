@@ -103,11 +103,6 @@ class DepartmentAdminView(WeeklyReportModelView):
     form_columns = ['name', 'users']
     can_edit = True
     can_delete = False
-    form_widget_args = {
-        'name': {
-            'readonly': True
-        },
-    }
 
 
 class ReportAdminView(WeeklyReportModelView):
