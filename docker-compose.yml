@@ -1,0 +1,37 @@
+version: '3.3'
+services:
+
+  db:
+    image: postgres
+    environment:
+      - POSTGRES_DB=wr_prd
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+    volumes:
+      - ./pg_data:/var/lib/postgresql/data
+
+  adminer:
+      image: adminer
+      restart: always
+      ports:
+          - 8080:8080
+
+  api:
+    build: .
+    #restart: always
+    stdin_open: true
+    tty: true
+    volumes:
+      - ./deploy:/deploy
+      - /etc/localtime:/etc/localtime:ro
+      # - ./gunicorn.conf:/etc/supervisor/conf.d/gunicorn.conf
+      # - ./supervisord.conf:/etc/supervisor/conf.d/supervisord.conf
+    depends_on:
+      - db
+    ports:
+      - 8000:5000
+      
+    #command: '/bin/bash'
+    #command: ['python3.6', ' wsgi.py', 'deploy']
+    #command: '/usr/bin/supervisord'
+    #command: ['gunicorn','--workers=3', 'wsgi:app', '-b 0.0.0.0:5000']
