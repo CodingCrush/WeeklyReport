@@ -1,5 +1,16 @@
 截图(V0.1):http://codingcrush.me/2017/04/16/weekly-report/
 
+#加入docker-compose
+
+可以在新机器上, 直接一键启动了:
+docker-compose up
+
+加入entrypoint.sh脚本:
+1 启动时先等待pg启动
+2 判断pg里是否已经有表
+3 如果没有表, 初始化表
+4 用gunicorn 启动 app
+
 ## 快速运行
 `-w <N>`为开启的gunicorn　worker进程数
 `-p 8000:80` 主机通过8000端口访问

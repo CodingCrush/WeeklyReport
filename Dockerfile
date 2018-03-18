@@ -10,10 +10,19 @@ RUN ln -s -f /usr/share/zoneinfo/Asia/Shanghai /etc/localtime && \
     mkdir ~/.pip && \
     echo -e "[global]\nindex-url=http://pypi.douban.com/simple/\ntrusted-host=pypi.douban.com">~/.pip/pip.conf && \
     yum clean all
-ADD . .
-RUN pip3.6 install -r requirements.txt --timeout=120
-WORKDIR /opt/weeklyreport
 
+RUN yum install -y supervisor
+
+RUN mkdir -p /deploy
+#VOLUME /deploy
+WORKDIR /deploy
+COPY requirements.txt /deploy/requirements.txt
+RUN pip3.6 install -r requirements.txt --timeout=120
+
+# Setup supervisord
+RUN mkdir -p /var/log/supervisor
+#COPY supervisord.conf /etc/supervisor/conf.d/supervisord.conf
+#COPY gunicorn.conf /etc/supervisor/conf.d/gunicorn.conf
 
 # Start wp-server container
 
@@ -24,4 +33,25 @@ WORKDIR /opt/weeklyreport
 #            -v /etc/localtime:/etc/localtime:ro \
 #            -v $PWD:/opt/weeklyreport \
 #            weeklyreport:0.2 \
-#            gunicorn wsgi:app --bind 0.0.0.0:80 -w 2 --log-file logs/awsgi.log --log-level=DEBUG
+#            gunicorn wsgi:app --bind 0.0.0.0:5000 -w 2 --log-file logs/awsgi.log --log-level=DEBUG
+
+# run sh. Start processes in docker-compose.yml
+
+
+#deploy
+COPY deploy /deploy
+#wait pg connected
+#RUN python3.6 checkdb.py
+# db  init migrate
+#RUN python3.6 wsgi.py deploy
+
+
+RUN mkdir -p /scripts
+COPY checkdb.py /scripts/checkdb.py
+COPY entrypoint.sh /scripts/entrypoint.sh
+#RUN chown -R /scripts
+RUN chmod +x /scripts/entrypoint.sh
+
+CMD ["/scripts/entrypoint.sh"]
+#CMD ["/usr/bin/supervisord"]
+#CMD ["/bin/bash"]
