@@ -1,3 +1,4 @@
+#coding:utf-8
 import datetime
 from functools import wraps
 from flask import abort
@@ -41,3 +42,9 @@ def get_last_week_start_at():
 
 def get_last_week_end_at():
     return get_this_monday()
+    
+def get_last_week_content(last_week_content):
+    content_index = last_week_content.find("next_week")
+    if content_index != -1:
+    	return last_week_content[content_index+31:]
+    return ""

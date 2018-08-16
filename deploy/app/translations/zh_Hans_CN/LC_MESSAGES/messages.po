@@ -108,27 +108,27 @@ msgstr "未知密码"
 msgid "Confirm New password"
 msgstr "确认新密码"
 
-#: auth/views.py:32
+#: auth/views.py:33
 msgid "You have been logged out"
 msgstr "您已注销"
 
-#: auth/views.py:57
+#: auth/views.py:61
 msgid "Successfully Registered, Please Login"
 msgstr "成功注册，请登录"
 
-#: auth/views.py:74
+#: auth/views.py:78
 msgid "Your password has been updated"
 msgstr "您的密码已更新"
 
-#: auth/views.py:91
+#: auth/views.py:95
 msgid "Your username has been updated"
 msgstr "您的用户名已更新"
 
-#: auth/views.py:118
+#: auth/views.py:122
 msgid "An email with instructions to reset your password has been sent to "
 msgstr "密码重置邮件已发送到您的邮箱　"
 
-#: auth/views.py:138
+#: auth/views.py:142
 msgid "Your password has been updated."
 msgstr "您的密码已更新"
 
@@ -253,3 +253,6 @@ msgstr "年份"
 msgid "Edit"
 msgstr "编辑"
 
+#: auth/views.py:25
+msgid "Account or password is wrong"
+msgstr "邮箱或密码错误"

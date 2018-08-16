@@ -1,8 +1,12 @@
+#coding:utf-8
 from app import create_app, db
 from app.models import Role, Department, Report
 from flask_migrate import Migrate, MigrateCommand
 from flask_script import Manager, Shell
 import os
+import sys
+reload(sys)
+sys.setdefaultencoding('utf8')
 
 
 config_file = os.path.join(
@@ -38,6 +42,7 @@ if __name__ == '__main__':
     def deploy():
         db.create_all()
         Role.insert_roles()
+        Department.delete_departments()
         Department.insert_departments()
 
     manager.run()

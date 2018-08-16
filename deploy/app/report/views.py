@@ -1,3 +1,4 @@
+#coding:utf-8
 from flask import render_template, redirect,request, url_for, \
     current_app, flash, Markup
 from flask_babelex import lazy_gettext as _
@@ -10,21 +11,30 @@ from .. import db
 from ..email import send_email
 from ..models import Permission, User, Report, Department
 from ..utils import get_week_count, permission_required, get_this_monday, \
-    get_last_week, get_last_week_start_at, get_last_week_end_at
+    get_last_week, get_last_week_start_at, get_last_week_end_at, get_last_week_content
 
 
 @report.route('/write/', methods=['GET', 'POST'])
 @permission_required(Permission.WRITE_REPORT)
 def write():
     form = WriteForm()
+    last_content_display = ""
     report = Report.query.filter_by(
         author_id=current_user.id,
         week_count=get_week_count(),
         year=datetime.today().year
     ).first()
+    
+    last_report = Report.query.filter_by(
+        author_id=current_user.id,
+        week_count=get_week_count() - 1,
+        year=datetime.today().year
+    ).first()
+            
     if form.submit.data and form.validate_on_submit():
         if report:
             report.content = form.body.data.replace('<br>', '')
+            report.last_content = form.last_content.data.replace('<br>', '')
             db.session.add(report)
         else:
             report = Report(
@@ -45,27 +55,39 @@ def write():
         form.body.data = report.content
     else:
         form.body.data = current_app.config['DEFAULT_CONTENT']
+        
+    if last_report:
+        form.last_content.data = last_report.content
+        last_content_display = get_last_week_content(last_report.content)
 
     return render_template('report/write.html',
                            form=form,
                            week_count=get_week_count(),
                            start_at=get_this_monday(),
-                           end_at=get_this_monday()+timedelta(days=6))
+                           end_at=get_this_monday()+timedelta(days=6),
+                           last_content_display=last_content_display)
 
 
 @report.route('/write/last_week', methods=['GET', 'POST'])
 @permission_required(Permission.WRITE_REPORT)
 def write_last_week():
     form = WriteForm()
-
+    last_content_display = ""
+    
     report = Report.query.filter_by(
         author_id=current_user.id,
         week_count=get_week_count(get_last_week()),
+        year=get_last_week().year).first()
+        
+    last_report = Report.query.filter_by(
+        author_id=current_user.id,
+        week_count=get_week_count(get_last_week()) - 1,
         year=get_last_week().year).first()
 
     if form.submit.data and form.validate_on_submit():
         if report:
             report.content = form.body.data.replace('<br>', '')
+            report.last_content = form.last_content.data.replace('<br>', '')
         else:
             report = Report(
                 content=form.body.data.replace('<br>', ''),
@@ -85,11 +107,17 @@ def write_last_week():
         form.body.data = report.content
     else:
         form.body.data = current_app.config['DEFAULT_CONTENT']
+        
+    if last_report:
+        form.last_content.data = last_report.content
+        last_content_display = get_last_week_content(last_report.content)
+                
     return render_template('report/write.html',
                            form=form,
                            week_count=get_week_count(get_last_week()),
                            start_at=get_last_week_start_at(),
-                           end_at=get_last_week_end_at() - timedelta(days=1))
+                           end_at=get_last_week_end_at() - timedelta(days=1),
+                           last_content_display=last_content_display)
 
 
 @report.route('/read/', methods=['GET'])

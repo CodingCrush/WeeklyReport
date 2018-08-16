@@ -1,3 +1,4 @@
+#coding:utf-8
 from datetime import date
 from flask import request, Response, redirect, url_for, current_app
 from flask_admin.model import typefmt
@@ -106,18 +107,22 @@ class DepartmentAdminView(WeeklyReportModelView):
 
 
 class ReportAdminView(WeeklyReportModelView):
-    column_labels = dict(year='年份', week_count='周次',
-                         created_at='创建时间', content='内容',
-                         author='员工邮箱', department='部门')
-    column_list = ('author', 'department', 'year', 'week_count',
+    column_labels = dict(year=u'年份', week_count=u'周次',
+                         created_at=u'创建时间', last_content=u'上周计划', content=u'内容',
+                         author=u'员工', department=u'部门')
+    column_list = ('author', 'department', 'year', 'week_count', 'last_content',
                    'content', 'created_at')
     column_default_sort = ('created_at', True)
     form_columns = ['created_at', 'week_count', 'year', 'content']
     list_template = '/admin/model/report_list_template.html'
     can_edit = True
     can_export = True
+    export_types=['xls']
     form_widget_args = {
         'year': {
+            'readonly': True
+        },
+        'last_content': {
             'readonly': True
         },
         'created_at': {

@@ -1,3 +1,4 @@
+#coding:utf-8
 from flask import render_template, redirect, url_for, \
     flash, current_app, request
 from flask_babelex import lazy_gettext as _
@@ -17,11 +18,11 @@ def login():
         user = User.query.filter_by(email=form.email.data).first()
         if user and user.verify_password(form.password.data):
             login_user(user, form.remember_me.data)
-
             current_app.logger.info(
                 '{} login'.format(current_user.email))
-
             return redirect(url_for('main.index'))
+        else:
+            flash(_('Account or password is wrong'))
     return render_template('auth/login.html', form=form)
 
 
