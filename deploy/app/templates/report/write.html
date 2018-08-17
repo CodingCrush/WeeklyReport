@@ -14,6 +14,9 @@
 
 
 {% block page_content %}
+    <div class="alert alert-warning">
+        请注意填写周报的日期
+    </div>
     <h3>第{{ week_count }}周({{start_at}}至{{end_at}})工作周报</h3>
     <form class="form form-inline" method="post" role="form">
         {{ form.csrf_token }}

@@ -10,9 +10,8 @@ from werkzeug.utils import secure_filename
 from . import main
 from .. import admin, db
 from ..models import Permission, User, Role, Report, Department
-from ..utils import permission_required, is_allowed_file
+from ..utils import permission_required, is_allowed_file, clean_html
 from sqlalchemy.exc import OperationalError
-
 
 @main.route('/', methods=['GET', 'POST'])
 def index():
@@ -113,6 +112,7 @@ class ReportAdminView(WeeklyReportModelView):
     column_list = ('author', 'department', 'year', 'week_count', 'last_content',
                    'content', 'created_at')
     column_default_sort = ('created_at', True)
+    column_searchable_list = ('week_count',)
     form_columns = ['created_at', 'week_count', 'year', 'content']
     list_template = '/admin/model/report_list_template.html'
     can_edit = True
@@ -132,12 +132,43 @@ class ReportAdminView(WeeklyReportModelView):
 
     def date_format(view, value):
         return value.strftime('%Y-%m-%d')
+        
+    def author_format(v, c, m, p):
+        return str(m.author)
+        
+    def department_format(v, c, m, p):
+        return str(m.department)
+    
+    def format_last_content(v, c, m, p):
+    	  if m.last_content:
+           return clean_html(m.last_content)
+
+    	  return ''
+
+    def format_content(v, c, m, p):
+    	  if m.content:
+           return clean_html(m.content)
+
+    	  return ''
+    	  
+    def format_created_at(v, c, m, p):
+    	  return m.created_at.strftime('%Y-%m-%d')   	  
 
     REPORT_FORMATTERS = dict(typefmt.BASE_FORMATTERS)
     REPORT_FORMATTERS.update({
-            date: date_format
+            date: date_format,
         })
     column_type_formatters = REPORT_FORMATTERS
+    
+    EXPORT_REPORT_FORMATTERS = dict(typefmt.BASE_FORMATTERS)
+    EXPORT_REPORT_FORMATTERS.update({
+            "author": author_format,
+            "department": department_format,
+            "last_content": format_last_content,
+            "content": format_content,
+            "created_at":format_created_at,
+        })
+    column_formatters_export = EXPORT_REPORT_FORMATTERS
 
 
 admin.add_view(UserAdminView(User, db.session, name='用户'))

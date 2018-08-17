@@ -3,6 +3,7 @@ import datetime
 from functools import wraps
 from flask import abort
 from flask_login import current_user
+import re
 
 
 def permission_required(permission):
@@ -48,3 +49,24 @@ def get_last_week_content(last_week_content):
     if content_index != -1:
     	return last_week_content[content_index+31:]
     return ""
+
+def clean_html(html):
+    """
+    Remove HTML markup from the given string.
+    :param html: the HTML string to be cleaned
+    :type html: str
+    :rtype: str
+    """
+
+    # First we remove inline JavaScript/CSS:
+    cleaned = re.sub(r"(?is)<(script|style).*?>.*?(</\1>)", "", html.strip())
+    # Then we remove html comments. This has to be done before removing regular
+    # tags since comments can contain '>' characters.
+    cleaned = re.sub(r"(?s)<!--(.*?)-->[\n]?", "", cleaned)
+    # Next we can remove the remaining tags:
+    cleaned = re.sub(r"(?s)<.*?>", " ", cleaned)
+    # Finally, we deal with whitespace
+    cleaned = re.sub(r"&nbsp;", " ", cleaned)
+    cleaned = re.sub(r"  ", " ", cleaned)
+    cleaned = re.sub(r"  ", " ", cleaned)
+    return cleaned.strip()

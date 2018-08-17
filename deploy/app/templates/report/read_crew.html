@@ -26,7 +26,31 @@
         <a rel="tag" class="post-tag">{{_('Department')}}:{{ report.department.name }}</a>
         <a rel="tag" class="post-tag">{{_('Week Count')}}:{{ report.week_count }}</a>
         <a rel="tag" class="post-tag">{{_('Year')}}:{{ report.year }}</a>
-        {{report.content|safe}}
+        <table class="table table-striped table-bordered table-hover model-list">
+        <thead>
+            <tr>
+	              <th class="column-header col-last_content">
+	                  {{_('Last Week')}}
+	              </th>
+	              
+	              <th class="column-header col-content">
+	                  {{_('Current Week')}}
+	              </th>
+            </tr>
+        </thead>
+        <tbody><tr>
+                    <td class="col-last_content">
+                            {{report.last_content|safe}}
+                    </td>
+                
+                    <td class="col-content">
+                            {{report.content|safe}}
+                    </td>
+            
+        </tr>
+        </tbody>
+					</table>
+        
         <hr>
     </div>
     {% endfor %}

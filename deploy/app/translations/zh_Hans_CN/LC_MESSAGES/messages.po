@@ -241,6 +241,7 @@ msgstr "点击重置密码"
 
 #: templates/report/read.html:15 templates/report/read_crew.html:28
 #: templates/report/read_department.html:26
+#: templates/admin/model/report_list_template.html:56
 msgid "Week Count"
 msgstr "周次"
 
@@ -256,3 +257,11 @@ msgstr "编辑"
 #: auth/views.py:25
 msgid "Account or password is wrong"
 msgstr "邮箱或密码错误"
+
+#: templates/report/read_crew.html:33
+msgid "Last Week"
+msgstr "上周"
+
+#: templates/report/read_crew.html:37
+msgid "Current Week"
+msgstr "本周"

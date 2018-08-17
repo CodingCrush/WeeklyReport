@@ -35,11 +35,10 @@ DEPARTMENTS = (
 )
 
 DEFAULT_CONTENT = "<p><strong>1、上周计划完成情况：</strong></p><ol><li></li></ol>" \
-                  "<p>&nbsp;<strong>2、计划外工作：</strong></p><ol><li></li></ol>" \
-                  "<p>&nbsp;<strong>3、协助运维工作： </strong></p><ol><li></li></ol>" \
-                  "<p>&nbsp;<strong>4、重要问题：</strong></p><ol><li></li></ol>" \
-                  "<p>&nbsp;<strong>5、持续未处理解决的事情：</strong></p><ol><li></li></ol>" \
-                  "<p>&nbsp;<strong id=\"next_week\">1、下周计划：</strong></p><ol><li></li></ol>"
+                  "<p>&nbsp;<strong>2、计划外工作（包含协助运维工作）：</strong></p><ol><li></li></ol>" \
+                  "<p>&nbsp;<strong>3、重要问题：</strong></p><ol><li></li></ol>" \
+                  "<p>&nbsp;<strong>4、持续未处理解决的事情：</strong></p><ol><li></li></ol>" \
+                  "<p>&nbsp;<strong id=\"next_week\">5、下周计划：</strong></p><ol><li></li></ol>"
 
 
 #SQLALCHEMY_DATABASE_URI = 'postgresql://postgres:postgres@db/wr_prd'

@@ -46,6 +46,9 @@ class Role(db.Model):
 
     def __str__(self):
         return self.name
+        
+    def __repr__(self):
+        return self.name        
 
 
 class Department(db.Model):
@@ -72,6 +75,9 @@ class Department(db.Model):
 
     def __str__(self):
         return self.name
+        
+    def __repr__(self):
+        return self.name        
 
 
 class User(db.Model, UserMixin):
@@ -134,6 +140,9 @@ class User(db.Model, UserMixin):
 
     def __str__(self):
         return self.username
+        
+    def __repr__(self):
+        return self.username        
 
 
 class AnonymousUser(AnonymousUserMixin):
@@ -195,6 +204,10 @@ class Report(db.Model):
     def __str__(self):
         return 'Posted by {} at {}'.format(
             User.query.get(self.author_id).email, self.created_at)
+            
+    def __repr__(self):
+        return 'Posted by {} at {}'.format(
+            User.query.get(self.author_id).email, self.created_at)            
 
 
 @login_manager.user_loader

@@ -39,6 +39,7 @@ def write():
         else:
             report = Report(
                 content=form.body.data.replace('<br>', ''),
+                last_content=form.last_content.data.replace('<br>', ''),
                 author_id=current_user.id,
                 week_count=get_week_count(),
                 year=datetime.today().year)
