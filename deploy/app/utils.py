@@ -18,8 +18,11 @@ def permission_required(permission):
     return decorator
 
 
-def get_week_count(at=datetime.datetime.now()):
-    return at.isocalendar()[1]
+def get_week_count(at=None):
+    if at:
+        return at.isocalendar()[1]
+    else:
+        return datetime.datetime.now().isocalendar()[1]
 
 
 def get_this_monday():
