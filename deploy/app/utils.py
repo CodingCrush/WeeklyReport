@@ -73,3 +73,12 @@ def clean_html(html):
     cleaned = re.sub(r"  ", " ", cleaned)
     cleaned = re.sub(r"  ", " ", cleaned)
     return cleaned.strip()
+	
+def get_week_days(year, week, index):
+    d = datetime.date(year, 1, 1)
+    if (d.weekday() > 3):
+        d = d + datetime.timedelta(7-d.weekday())
+    else:
+	    d = d - datetime.timedelta(d.weekday())
+    dlt = datetime.timedelta(days = (week - 1) * 7)
+    return (d + dlt, d + dlt + datetime.timedelta(days=6))[index]

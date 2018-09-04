@@ -14,6 +14,8 @@
         <a rel="tag" class="post-tag">{{_('Department')}}:{{ report.department.name }}</a>
         <a rel="tag" class="post-tag">{{_('Week Count')}}:{{ report.week_count }}</a>
         <a rel="tag" class="post-tag">{{_('Year')}}:{{ report.year }}</a>
+		<a rel="tag" class="post-tag">{{_('Start')}}:{{ report.year | get_week_days(report.week_count,0) }}</a>
+		<a rel="tag" class="post-tag">{{_('End')}}:{{ report.year | get_week_days(report.week_count,1) }}</a>
         {{report.content|safe}}
 
         {% if report.is_of_current_week %}
