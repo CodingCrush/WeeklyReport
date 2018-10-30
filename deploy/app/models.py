@@ -1,3 +1,4 @@
+#coding:utf-8
 from datetime import datetime
 from werkzeug.security import generate_password_hash, check_password_hash
 from flask import current_app
@@ -36,15 +37,18 @@ class Role(db.Model):
             'ADMINISTRATOR': 0xff,
         }
         for r in roles:
-            role = Role.query.filter_by(name=r).first()
+            role = Role.query.filter_by(name=unicode(r)).first()
             if role is None:
-                role = Role(name=r,
+                role = Role(name=unicode(r),
                             permissions=roles[r])
             db.session.add(role)
         db.session.commit()
 
     def __str__(self):
         return self.name
+        
+    def __repr__(self):
+        return self.name        
 
 
 class Department(db.Model):
@@ -56,13 +60,24 @@ class Department(db.Model):
     @staticmethod
     def insert_departments():
         for dept in current_app.config['DEPARTMENTS']:
-            if not Department.query.filter_by(name=dept).first():
-                dept = Department(name=dept)
-                db.session.add(dept)
-            db.session.commit()
+            if not Department.query.filter_by(name=unicode(dept)).first():
+			        dept = Department(name=unicode(dept))
+			        db.session.add(dept)
+        db.session.commit()
+        
+    @staticmethod
+    def delete_departments():
+        dept="1"
+        dept= Department.query.filter_by(name=unicode(dept)).first()
+        if dept:
+			     db.session.delete(dept)
+        db.session.commit()        
 
     def __str__(self):
         return self.name
+        
+    def __repr__(self):
+        return self.name        
 
 
 class User(db.Model, UserMixin):
@@ -124,7 +139,10 @@ class User(db.Model, UserMixin):
         return self.can(Permission.WRITE_REPORT)
 
     def __str__(self):
-        return self.email
+        return self.username
+        
+    def __repr__(self):
+        return self.username        
 
 
 class AnonymousUser(AnonymousUserMixin):
@@ -151,6 +169,7 @@ class Report(db.Model):
     created_at = db.Column(db.DateTime, index=True, default=datetime.now)
     author_id = db.Column(db.Integer, db.ForeignKey('users.id'))
     content = db.Column(db.Text)
+    last_content = db.Column(db.Text)
     week_count = db.Column(db.Integer)
     year = db.Column(db.Integer)
 
@@ -175,15 +194,25 @@ class Report(db.Model):
                 and self.year == get_last_week().year:
             return True
         return False
+        
+    @staticmethod
+    def get_last_report(author_id, week_count):
+        report = Report.query.filter_by(author_id=author_id,week_count=week_count).first()
+        if report:
+			      return report
 
     def __str__(self):
         return 'Posted by {} at {}'.format(
             User.query.get(self.author_id).email, self.created_at)
+            
+    def __repr__(self):
+        return 'Posted by {} at {}'.format(
+            User.query.get(self.author_id).email, self.created_at)            
 
 
 @login_manager.user_loader
 def load_user(user_id):
-    assert type(user_id) == str
+    #assert type(user_id) == str
     return User.query.get(int(user_id))
 
 

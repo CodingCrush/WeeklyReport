@@ -7,6 +7,7 @@ from flask_mail import Mail
 from flask_login import LoginManager
 from flask_sqlalchemy import SQLAlchemy
 from .json_encoder import JSONEncoder
+from utils import get_last_week_content, get_week_days
 
 
 bootstrap = Bootstrap()
@@ -60,4 +61,7 @@ def create_app(config_file):
 
     # lazy_gettext Json Error Fix
     app.json_encoder = JSONEncoder
+    
+    app.add_template_filter(get_last_week_content, 'get_last_week_content')
+    app.add_template_filter(get_week_days, 'get_week_days')
     return app

@@ -53,6 +53,7 @@
 
         {% if search_supported %}
         <li>
+        	  {{_('Week Count')}}
             {{ model_layout.search_form() }}
         </li>
         {% endif %}
@@ -143,6 +144,8 @@
                     {% else %}
                         {% if c=='content' %}
                             {{ get_value(row, c) |safe}}
+												{% elif c =='last_content'%}
+                            {{ get_value(row, c) |safe | get_last_week_content}}                                                    
                         {% else %}
                             {{ get_value(row, c) }}
                         {% endif %}

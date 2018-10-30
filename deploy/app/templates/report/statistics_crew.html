@@ -21,7 +21,10 @@
             {% endif %}
         </div>
         <div class="panel-body">
-        {% column_chart contrast %}
+            {% for key, value in contrast.iteritems() %}
+            <a>{{ key }}:</a>{{value}}
+            <br/>
+            {% endfor %}
         </div>
     </div>
 
@@ -54,6 +57,8 @@
 
 </div>
 
+{#
 {{ wtf.quick_form(form) }}
+#}
 
 {% endblock %}

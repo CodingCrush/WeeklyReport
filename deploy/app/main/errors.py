@@ -1,3 +1,4 @@
+#coding:utf-8
 from flask import render_template, current_app, request, redirect, url_for
 from flask_login import current_user
 from . import main

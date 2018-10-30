@@ -1,3 +1,4 @@
+#coding:utf-8
 from flask_babelex import lazy_gettext as _
 from flask_wtf import FlaskForm
 from wtforms.fields.html5 import EmailField

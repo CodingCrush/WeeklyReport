@@ -14,13 +14,18 @@
 
 
 {% block page_content %}
+    <div class="alert alert-warning">
+        请注意填写周报的日期
+    </div>
     <h3>第{{ week_count }}周({{start_at}}至{{end_at}})工作周报</h3>
     <form class="form form-inline" method="post" role="form">
         {{ form.csrf_token }}
         {{ form.hidden_tag() }}
         {{ wtf.form_errors(form, hiddens="only") }}
-
+         <h4>上周工作计划</h4>
+        {{ last_content_display|safe }}
         {{ form.body(class='wangEditor') }}
+        {{ form.last_content }}
         <hr style="height:10pt; visibility:hidden;" />
 
         {{ wtf.form_field(form.submit) }}
