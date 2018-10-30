@@ -1,4 +1,4 @@
-截图(V0.1):http://codingcrush.me/2017/04/16/weekly-report/
+截图(V0.1):https://blog.mcloud.fun:81/2017/04/16/weekly-report/
 
 #加入docker-compose
 
