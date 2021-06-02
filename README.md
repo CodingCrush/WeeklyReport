@@ -1,4 +1,4 @@
-截图(V0.1):https://blog.mcloud.fun:81/post/weekly-report/
+demo: https://wr.mcloud.fun:81
 
 #加入docker-compose
 
